@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class LineRenders : MonoBehaviour
 {
-    private float SongCutNum;//¸èÇúĞ¡½ÚÊı
+    private float SongCutNum;//æ­Œæ›²å°èŠ‚æ•°
     public LineRenderer lineRenderL;
-    public LineRenderer BarCutLine;//Ò»ÅÄ»­Ò»¸öÕâ¸öÏß
-    public LineRenderer SecCutLine;//Ğ¡½Ú²ğ·ÖÏß
+    public LineRenderer BarCutLine;//ä¸€æ‹ç”»ä¸€ä¸ªè¿™ä¸ªçº¿
+    public LineRenderer SecCutLine;//å°èŠ‚æ‹†åˆ†çº¿
     public GameObject FatherObject;
 
-    public static List<CutLine> linesData=new List<CutLine>();//´æ´¢ËùÓĞÏßµÄÊ±¼äĞÅÏ¢
+    public static List<CutLine> linesData=new List<CutLine>();//å­˜å‚¨æ‰€æœ‰çº¿çš„æ—¶é—´ä¿¡æ¯
 
     int BeatCut = GameTime.BeatCutCount;
     void Start()
     {
-        SongCutNum = (GameTime.songsLength * GameTime.Basic_BPM / 60f);//Ëã³öĞ¡½ÚÊı,Éú³É¶ÔÓ¦³¤¶ÈÏß
+        SongCutNum = (GameTime.songsLength * GameTime.Basic_BPM / 60f);//ç®—å‡ºå°èŠ‚æ•°,ç”Ÿæˆå¯¹åº”é•¿åº¦çº¿
         BeatCut = GameTime.BeatCutCount;
         LineDraw();
     }
@@ -23,7 +23,8 @@ public class LineRenders : MonoBehaviour
     {
         if (BeatCut != GameTime.BeatCutCount)
         {
-            //ĞèÒªÒ»¸öÇå³ı¾ÉµÄ»®·ÖÏßµÄ·½·¨
+            //éœ€è¦ä¸€ä¸ªæ¸…é™¤æ—§çš„åˆ’åˆ†çº¿çš„æ–¹æ³•
+            ClearOldLines();
             LineDraw();
         }
            
@@ -31,14 +32,14 @@ public class LineRenders : MonoBehaviour
     private void LineDraw()
     {
         lineRenderL.transform.localScale += new Vector3(0, 0, SongCutNum * 7 - 1);
-        float LineSpacing=lineRenderL.transform.localScale.z/ SongCutNum /GameTime.BeatCutCount;//Ïß¼ä¾à
+        float LineSpacing=lineRenderL.transform.localScale.z/ SongCutNum /GameTime.BeatCutCount;//çº¿é—´è·
         for (int i = 0; i < SongCutNum * GameTime.BeatCutCount; i++)
         {
-            if (i % GameTime.BeatCutCount == 0)//»­Ïß
+            if (i % GameTime.BeatCutCount == 0)//ç”»çº¿
             {
                 LineRenderer line = Instantiate(BarCutLine, new Vector3(-8, -4 + i * LineSpacing, 15), BarCutLine.transform.rotation, FatherObject.transform);
                 CutLine c = new CutLine();
-                c.LineTime = i * GameTime.secPerBeat/GameTime.BeatCutCount;//¼ÆËãµ±Ç°ÏßµÄÊ±¼äµã
+                c.LineTime = i * GameTime.secPerBeat/GameTime.BeatCutCount;//è®¡ç®—å½“å‰çº¿çš„æ—¶é—´ç‚¹
                 linesData.Add(c);
                 //Debug.Log(c.LineTime);
                 line.name = i.ToString();
@@ -47,15 +48,36 @@ public class LineRenders : MonoBehaviour
             {
                 LineRenderer cutline = Instantiate(SecCutLine, new Vector3(-8, -4 + i  *LineSpacing, 15), SecCutLine.transform.rotation, FatherObject.transform);
                 CutLine c = new CutLine();
-                c.LineTime = i * GameTime.secPerBeat / GameTime.BeatCutCount;//¼ÆËãµ±Ç°ÏßµÄÊ±¼äµã
+                c.LineTime = i * GameTime.secPerBeat / GameTime.BeatCutCount;//è®¡ç®—å½“å‰çº¿çš„æ—¶é—´ç‚¹
                 linesData.Add(c);
                 //Debug.Log(c.LineTime);
                 cutline.name = i.ToString();
             }
         }
     }
+    
+    void ClearOldLines()
+    {
+        BeatCut = GameTime.BeatCutCount;//ä¸è¾“å…¥èŠ‚æ‹åŒæ­¥
+        linesData.Clear();
+
+        bool isFatherActive = FatherObject.activeSelf;//å­˜FatherObjectçš„æ¿€æ´»çŠ¶æ€
+        
+        FatherObject.SetActive(true);
+        lineRenderL.transform.localScale = new Vector3(1f, 1f, 1f);
+        GameObject[] lines = GameObject.FindGameObjectsWithTag("Line");
+        foreach (var oldlines in lines)
+        {
+            DestroyImmediate(oldlines);
+        }
+
+        if (!isFatherActive)
+        {
+            FatherObject.SetActive(false);
+        }
+    }
 }
 public class CutLine
 {
-    public float LineTime;//µ±Ç°ÏßµÄ¶ÔÓ¦Ê±¼ä
+    public float LineTime;//å½“å‰çº¿çš„å¯¹åº”æ—¶é—´
 }
