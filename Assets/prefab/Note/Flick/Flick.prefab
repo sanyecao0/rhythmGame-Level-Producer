@@ -93,7 +93,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8803644268203475605}
+<<<<<<< HEAD
   - component: {fileID: -8422264697425826408}
+=======
+  - component: {fileID: 2058505049673441566}
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
   m_Layer: 0
   m_Name: Flick
   m_TagString: Untagged
@@ -109,7 +113,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4592138362108075143}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+<<<<<<< HEAD
   m_LocalPosition: {x: -7.8812137, y: 2.9401855, z: 14}
+=======
+  m_LocalPosition: {x: -2.7548459, y: 2.7716935, z: 14}
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -117,16 +125,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!65 &-8422264697425826408
 BoxCollider:
+=======
+--- !u!114 &2058505049673441566
+MonoBehaviour:
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4592138362108075143}
+<<<<<<< HEAD
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+=======
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fca2ad81fab345e4cb6f5d8f8bccc1b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: 0
+  NoteType: 0
+  texture: {fileID: 0}
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea

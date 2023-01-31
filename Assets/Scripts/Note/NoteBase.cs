@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+<<<<<<< HEAD
 public class NoteBase 
 {
     public float start_time;//时间或开始时间
@@ -29,4 +30,9 @@ public class NoteBase
         this.speed = speed;
         this.fake = isfake;
     }
+=======
+public abstract class NoteBase : MonoBehaviour
+{
+    public float time;
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
 }

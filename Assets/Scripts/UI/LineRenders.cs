@@ -6,7 +6,10 @@ public class LineRenders : MonoBehaviour
 {
     private float SongCutNum;//歌曲小节数
     public LineRenderer lineRenderL;
+<<<<<<< HEAD
     public LineRenderer lineRenderR;
+=======
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
     public LineRenderer BarCutLine;//一拍画一个这个线
     public LineRenderer SecCutLine;//小节拆分线
     public GameObject FatherObject;
@@ -14,7 +17,11 @@ public class LineRenders : MonoBehaviour
     public static List<CutLine> linesData=new List<CutLine>();//存储所有线的时间信息
 
     int BeatCut = GameTime.BeatCutCount;
+<<<<<<< HEAD
     void Awake()
+=======
+    void Start()
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
     {
         SongCutNum = (GameTime.songsLength * GameTime.Basic_BPM / 60f);//算出小节数,生成对应长度线
         BeatCut = GameTime.BeatCutCount;
@@ -33,7 +40,10 @@ public class LineRenders : MonoBehaviour
     private void LineDraw()
     {
         lineRenderL.transform.localScale += new Vector3(0, 0, SongCutNum * 7 - 1);
+<<<<<<< HEAD
         lineRenderR.transform.localScale += new Vector3(0, 0, SongCutNum * 7 - 1);
+=======
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
         float LineSpacing=lineRenderL.transform.localScale.z/ SongCutNum /GameTime.BeatCutCount;//线间距
         for (int i = 0; i < SongCutNum * GameTime.BeatCutCount; i++)
         {
@@ -52,7 +62,11 @@ public class LineRenders : MonoBehaviour
                 CutLine c = new CutLine();
                 c.LineTime = i * GameTime.secPerBeat / GameTime.BeatCutCount;//计算当前线的时间点
                 linesData.Add(c);
+<<<<<<< HEAD
                // Debug.Log(c.LineTime);
+=======
+                //Debug.Log(c.LineTime);
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
                 cutline.name = i.ToString();
             }
         }
@@ -72,6 +86,10 @@ public class LineRenders : MonoBehaviour
         {
             DestroyImmediate(oldlines);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
         if (!isFatherActive)
         {
             FatherObject.SetActive(false);

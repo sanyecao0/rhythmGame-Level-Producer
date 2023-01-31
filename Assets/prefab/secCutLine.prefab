@@ -1,6 +1,10 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+<<<<<<< HEAD
 --- !u!1 &4694556702100953467
+=======
+--- !u!1 &3543584586334976077
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +12,13 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 4694556702100953469}
   - component: {fileID: 4694556702100953468}
+=======
+  - component: {fileID: 3543584586334976075}
+  - component: {fileID: 3543584586334976074}
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
   m_Layer: 0
   m_Name: secCutLine
   m_TagString: Line
@@ -17,38 +26,63 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!4 &4694556702100953469
+=======
+--- !u!4 &3543584586334976075
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 4694556702100953467}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -8, y: 0, z: 15}
   m_LocalScale: {x: 1, y: 1, z: 3}
   m_ConstrainProportionsScale: 0
+=======
+  m_GameObject: {fileID: 3543584586334976077}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -8, y: 0, z: 15}
+  m_LocalScale: {x: 1, y: 1, z: 12}
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+<<<<<<< HEAD
 --- !u!120 &4694556702100953468
+=======
+--- !u!120 &3543584586334976074
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
 LineRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 4694556702100953467}
+=======
+  m_GameObject: {fileID: 3543584586334976077}
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+<<<<<<< HEAD
   m_StaticShadowCaster: 0
+=======
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+<<<<<<< HEAD
   m_RayTraceProcedural: 0
+=======
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -96,8 +130,13 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
+<<<<<<< HEAD
       key0: {r: 0, g: 0.9811321, b: 0.95421773, a: 1}
       key1: {r: 0, g: 0.53652805, b: 0.8301887, a: 1}
+=======
+      key0: {r: 0, g: 0.9528302, b: 0.7285229, a: 1}
+      key1: {r: 0, g: 0.4554243, b: 1, a: 1}
+>>>>>>> 4b5ab1e819840b8603e3c581be9feedb23fdccea
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
