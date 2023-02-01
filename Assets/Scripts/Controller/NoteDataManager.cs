@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -16,7 +17,7 @@ public class NoteDataManager : MonoBehaviour
 	public GameObject FatherObject;
 	public static int index;
 	public bool NoteDelete = false;
-	Vector3 mousePosition, targetPosition;
+	private Vector3 mousePosition, targetPosition, endPosition;
 
 	public Dictionary<GameObject,Receiver> ReciverDic=new Dictionary<GameObject, Receiver>();
 	public Dictionary<GameObject, NoteBase> NoteDic = new Dictionary<GameObject, NoteBase>();//存储note信息
@@ -36,7 +37,8 @@ public class NoteDataManager : MonoBehaviour
 	{
 		if (FatherObject.activeSelf)//避免误触
 		{
-			if (Input.GetMouseButtonUp(0) && Input.mousePosition.x < 423)//左键放置音符，且必须在左半屏
+			
+			if (Input.GetMouseButtonDown(0) && Input.mousePosition.x < 423)//左键按下，且必须在左半屏
 			{
 				if (!EventSystem.current.IsPointerOverGameObject())//如果没点到UI上
 				{
@@ -45,18 +47,36 @@ public class NoteDataManager : MonoBehaviour
 					targetPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 14f));
 					//转换世界坐标
 					Note.transform.position = targetPosition;
-                    if (NoteDelete)//判断音符操作模式
-						NoteInput_Delete();
-                    else
-                        NoteInput();
 				}
 			}
-			else if (Input.GetMouseButtonUp(0) && Input.mousePosition.x > 423)
+			else if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > 423)
 			{//右半屏幕面板操作
 				Debug.Log("点击了右半屏幕");
 				//待处理
 			}
+
+			if (Input.GetMouseButtonUp(0) && Input.mousePosition.x < 423)//左键抬起放置音符，且必须在左半屏
+			{
+				if (!EventSystem.current.IsPointerOverGameObject()) //如果没点到UI上
+				{
+					mousePosition = Input.mousePosition;//获取鼠标点击位置
+					endPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 14f));
+					//转换世界坐标
+					if (NoteDelete)//判断音符操作模式
+						NoteInput_Delete();
+					else
+						NoteInput();
+				}
+				else if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > 423)
+				{//右半屏幕面板操作
+					Debug.Log("点击了右半屏幕");
+					//待处理
+				}
+			}
+			
 		}
+		
+		
 	}
 	void NoteInput()
     {
@@ -74,6 +94,14 @@ public class NoteDataManager : MonoBehaviour
         {
 			//实例化Hold音符方法
 			Debug.Log("实例化Hold音符");
+			GameObject note = Instantiate(Note, Note.transform.position, Note.transform.rotation, FatherObject.transform);
+			float ftime = 0.0f;
+			NoteBase notemes = new NoteBase(SetPosition(note) * GameTime.secPerBeat,
+				GetEndPosition() * GameTime.secPerBeat, index, 0, 1, false);
+			Debug.Log(notemes.start_time);
+			Debug.Log(notemes.Finish_time);
+			NoteDic.Add(note, notemes);//根据字典绑定音符信息和unity2d对象
+			TargetReciver.Note.Add(notemes);//存入当前指定接收器的note列表
         }
 	}
 	void NoteInput_Delete()
@@ -151,6 +179,27 @@ public class NoteDataManager : MonoBehaviour
 		    NOTE.transform.position = new Vector3(-6.5f, NOTE.transform.position.y, NOTE.transform.position.z);
 			return int.Parse(TargetObject.name);//根据线的编号计算对应时间
     }
+
+	int GetEndPosition()
+	{
+		GameObject[] lines;//存储所有线信息
+		lines = GameObject.FindGameObjectsWithTag("Line");
+		GameObject TargetObject = lines[0];//默认初始化
+		float diff = (lines[0].transform.position.y - endPosition.y);//计算y距离差值
+		diff = Mathf.Abs(diff);//取绝对值
+		float Target = diff;
+		foreach (GameObject l in lines)//遍历所有时间线
+		{
+			diff = (l.transform.position.y - endPosition.y); //计算endPosition与line的距离差
+			diff = Mathf.Abs(diff);//取绝对值
+			if (diff < Target)
+			{ //找出最近距离
+				Target = diff;
+				TargetObject = l;//取得最近线条
+			}
+		}
+		return int.Parse(TargetObject.name);//根据线的编号计算对应时间
+	}
 	public void RedClickChoose()
     {
 		index = 0;
