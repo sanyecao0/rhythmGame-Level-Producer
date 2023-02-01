@@ -82,10 +82,11 @@ public class NoteDataManager : MonoBehaviour
 			RaycastHit hit;
 			if (Physics.Raycast(ray, out hit))
 			{
+			//Debug.Log(hit.collider.gameObject);
 			TargetReciver.Note.Remove(NoteDic[hit.collider.gameObject]);//移出当前接收器note序列
 			NoteDic.Remove(hit.collider.gameObject);//移出字典
 			DestroyImmediate(hit.collider.gameObject);//删除实例化的u2d对象
-		}
+		    }
 	}
 	Vector3 GetNotePos()
 	{//坐标转换
