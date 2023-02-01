@@ -76,7 +76,6 @@ public class NoteDataManager : MonoBehaviour
 			
 		}
 		
-		
 	}
 	void NoteInput()
     {
