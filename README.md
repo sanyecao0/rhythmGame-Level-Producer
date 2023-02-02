@@ -34,7 +34,23 @@ C#脚本编辑工具为Visual studio社区版
 
 ​      <u>**git config --global core.autocrlf true**</u>
 
-然后正常提交即可。
+# 提交方法：
+
+为了避免出现不必要的情况，我们不允许直接提交到master分支，而应该是先提交到本地dev分支，在提交到仓库，然后在仓库创建合并请求，待管理员检查后合并到master分支
+
+1：git中输入$ **git branch**查看本地所有分支
+
+2：输入git branch -r可查看远程分支
+
+3：输入git checkout  dev移动到dev分支
+
+4：git add .提交所有变更至本地dev分支
+
+5：git commit -m""
+
+6:  git push origin dev
+
+7：在仓库发起合并请求，等待检查和合并
 
 # GameTime类
 
