@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d0ecb45b1585f7b48806fbece2598673
+guid: 089d281ab8775994da87a1aeda0fe182
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -129,22 +129,22 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ClickRed_0
+      name: rocker_0
       rect:
         serializedVersion: 2
-        x: 172
-        y: 583
-        width: 1576
-        height: 275
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 36
+        y: 34
+        width: 236
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 74e2db554aaa593418e4f6f2e7c56f09
-      internalID: 79304820
+      spriteID: a5eee719672c127499c5e2ca5365b73a
+      internalID: 2007920156
       vertices: []
       indices: 
       edges: []
@@ -160,7 +160,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      ClickRed_0: 79304820
+      rocker_0: 2007920156
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

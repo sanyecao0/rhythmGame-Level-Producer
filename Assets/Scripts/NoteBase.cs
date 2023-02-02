@@ -11,20 +11,20 @@ public class NoteBase
     public float speed;//默认速度
     public bool fake;//真假音符
 
-    public NoteBase(float stime, float ftime, int t, float degree, float speed, bool isfake)//hold专用构造方法
+    public NoteBase(float stime, float ftime, int type, float angle, float speed, bool isfake)//hold专用构造方法
     {
         this.start_time = stime;
         this.Finish_time = ftime;
-        this.type = t;
-        this.degree = degree;
+        this.type = type;
+        this.degree = angle;
         this.speed = speed;
         this.fake = isfake;
     }
-    public NoteBase(float stime, int t, float degree, float speed, bool isfake)//普通音符构造方法
+    public NoteBase(float stime, int t, float angle, float speed, bool isfake)//普通音符构造方法
     {
         this.start_time = stime;
         this.type = t;
-        this.degree = degree;
+        this.degree = angle;
         this.speed = speed;
         this.fake = isfake;
     }

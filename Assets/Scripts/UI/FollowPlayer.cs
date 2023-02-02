@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class FllowPlayer : MonoBehaviour
+public class FollowPlayer : MonoBehaviour
 {
     //面板滑动与播放控制
     float scale = 0.2f;
@@ -25,24 +25,31 @@ public class FllowPlayer : MonoBehaviour
             {
                 if (transform.position.y <= 0)
                 {
-                    transform.position += new Vector3(0, 1 * scale);
-                    songs.time -= 0.2f / 5.25f;
-                    inputTimeString.text = Convert.ToDouble(songs.time).ToString("0.000");
-                    Debug.Log("减时间");
-
+                    MoveUP();
                 }
             }
             else if (Input.GetAxis("Mouse ScrollWheel") < 0)
             {
-
-                transform.position -= new Vector3(0, 1 * scale);
-                songs.time += 0.2f / 5.25f;
-                inputTimeString.text = Convert.ToDouble(songs.time).ToString("0.000");
-                //还需要一个修改播放时间的方法
-                Debug.Log("加时间");
+                MoveDown();
             }
-            }
+          }
         }
+    private void MoveUP()
+    {
+        transform.position += new Vector3(0, 1 * scale);
+        songs.time = songs.time - 0.2f / 5.25f;
+        inputTimeString.text = Convert.ToDouble(songs.time).ToString("0.000");
+        Debug.Log("减时间");//如果进入编辑界面时没有点击播放按钮，那么该方法无效
+        Debug.Log(songs.time);
+    }
+    private void MoveDown()
+    {
+        transform.position -= new Vector3(0, 1 * scale);
+        songs.time = songs.time + 0.2f / 5.25f;
+        inputTimeString.text = Convert.ToDouble(songs.time).ToString("0.000");
+        Debug.Log("加时间");//如果进入编辑界面时没有点击播放按钮，那么该方法无效
+        Debug.Log(songs.time);
+    }
     public void MusicPlay()
     {
         isPlay = true;

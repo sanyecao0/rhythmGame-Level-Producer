@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class NoteDataManager : MonoBehaviour
 {
@@ -14,20 +15,22 @@ public class NoteDataManager : MonoBehaviour
 
 	public GameObject Note;
 	public GameObject FatherObject;
-	public static int index;
+	public static int index;//音符索引
+	public static float Angle=0;//生成角度,默认为0°即正上方
+	public InputField inputAngle;//绑定角度输入框
 	public bool NoteDelete = false;
 	Vector3 mousePosition, targetPosition;
 
 	public Dictionary<GameObject,Receiver> ReciverDic=new Dictionary<GameObject, Receiver>();
 	public Dictionary<GameObject, NoteBase> NoteDic = new Dictionary<GameObject, NoteBase>();//存储note信息
-	private Receiver TargetReciver;
+	private Receiver TargetReciver;//当前编辑的接收器
 
 	private void Awake()
     {
 		Note = BlackClick;
         if (DataManager.NoteData.Count==0)//新谱面应至少有一个接收器
         {
-			Receiver r = new Receiver(1.0,255,5.0,5.0);//默认构造接收器
+			Receiver r = new Receiver(1.0,255,640,360);//默认构造接收器
 			DataManager.NoteData.Add(r);
 			TargetReciver = r;
 		}
@@ -64,7 +67,7 @@ public class NoteDataManager : MonoBehaviour
         {
 			GameObject note = Instantiate(Note, Note.transform.position, Note.transform.rotation, FatherObject.transform);
 			//编辑面板实例化一个2d音符对象
-			NoteBase notemes = new NoteBase(SetPosition(note) * GameTime.secPerBeat, index, 0, 1, false);
+			NoteBase notemes = new NoteBase(SetPosition(note) * GameTime.secPerBeat, index, Angle, 1, false);
 			//音符信息实例化
 			Debug.Log(notemes.start_time);
 			NoteDic.Add(note, notemes);//根据字典绑定音符信息和unity2d对象
@@ -190,5 +193,18 @@ public class NoteDataManager : MonoBehaviour
 	public void SetNoteDelete()
     {
 		NoteDelete = true;
+    }
+
+	public void SetAngle()
+    {
+		if(float.Parse(inputAngle.text)>=0&& float.Parse(inputAngle.text) <= 360)
+        {
+			Angle = float.Parse(inputAngle.text);
+		}
+        else
+        {
+			inputAngle.text = Angle.ToString();
+        }
+		//Debug.Log(Angle);
     }
 }

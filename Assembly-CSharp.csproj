@@ -62,7 +62,7 @@
     <Compile Include="Assets\Scripts\UI\LineRenders.cs" />
     <Compile Include="Assets\Scripts\UI\File\FileName.cs" />
     <Compile Include="Assets\Scripts\NoteBase.cs" />
-    <Compile Include="Assets\Scripts\UI\FllowPlayer.cs" />
+    <Compile Include="Assets\Scripts\UI\FollowPlayer.cs" />
     <Compile Include="Assets\Scripts\Receiver\Receiver.cs" />
     <Compile Include="Assets\Scripts\Controller\TimingGroup.cs" />
     <Compile Include="Assets\Scripts\Controller\GameTime.cs" />

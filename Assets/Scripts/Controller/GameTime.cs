@@ -99,14 +99,4 @@ public class GameTime : MonoBehaviour
             AudioOffset = 0;
         }
     }
-    public  void Mouse1InputUp()//时间增加
-    {
-        songs.time += 0.2f / 5.25f;
-        inputTimeString.text = Convert.ToDouble(songs.time).ToString("0.000");
-    }
-    public void Mouse1inputDown()
-    {
-        songs.time -= 0.2f / 5.25f;
-        inputTimeString.text = Convert.ToDouble(songs.time).ToString("0.000");
-    }
 }
