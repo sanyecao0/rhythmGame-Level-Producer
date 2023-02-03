@@ -7,7 +7,7 @@ using System;
 public class FollowPlayer : MonoBehaviour
 {
     //面板滑动与播放控制
-    float scale = 0.2f;
+    float scale = 1.05f;
     bool isPlay = false;
     public InputField inputTimeString;
     public AudioSource songs;
@@ -37,7 +37,7 @@ public class FollowPlayer : MonoBehaviour
     private void MoveUP()
     {
         transform.position += new Vector3(0, 1 * scale);
-        songs.time = songs.time - 0.2f / 5.25f;
+        songs.time = songs.time - scale / 5.25f;
         inputTimeString.text = Convert.ToDouble(songs.time).ToString("0.000");
         Debug.Log("减时间");//如果进入编辑界面时没有点击播放按钮，那么该方法无效
         Debug.Log(songs.time);
@@ -45,7 +45,7 @@ public class FollowPlayer : MonoBehaviour
     private void MoveDown()
     {
         transform.position -= new Vector3(0, 1 * scale);
-        songs.time = songs.time + 0.2f / 5.25f;
+        songs.time = songs.time + scale / 5.25f;
         inputTimeString.text = Convert.ToDouble(songs.time).ToString("0.000");
         Debug.Log("加时间");//如果进入编辑界面时没有点击播放按钮，那么该方法无效
         Debug.Log(songs.time);
@@ -57,5 +57,12 @@ public class FollowPlayer : MonoBehaviour
     public void MusicPause()
     {
         isPlay = false;
+    }
+    public void InitAudioSource()
+    {
+        songs.Play();
+        MusicPlay();
+        songs.Pause();
+        MusicPause();
     }
  }
