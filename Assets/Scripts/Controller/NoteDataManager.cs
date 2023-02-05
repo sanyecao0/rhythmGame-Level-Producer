@@ -7,84 +7,69 @@ using UnityEngine.UI;
 
 public class NoteDataManager : MonoBehaviour
 {
-    public GameObject BlackClick;
-    public GameObject RedClick;
-    public GameObject WhiteClick;
-    public GameObject Flick;
-    public GameObject Hold;
-    public GameObject Drag;
+	public GameObject BlackClick;
+	public GameObject RedClick;
+	public GameObject WhiteClick;
+	public GameObject Flick;
+	public GameObject Hold;
+	public GameObject Drag;
+
 
 	public GameObject Note;
 	public GameObject FatherObject;
+	public GameObject ReceiverPanel;
 	public static int index;//音符索引
-	public static float Angle=0;//生成角度,默认为0°即正上方
+	public static float Angle = 0;//生成角度,默认为0°即正上方
 	public InputField inputAngle;//绑定角度输入框
 	public bool NoteDelete = false;
 	private Vector3 mousePosition, targetPosition, endPosition;
 
-	public Dictionary<GameObject,Receiver> ReciverDic=new Dictionary<GameObject, Receiver>();
+	public Dictionary<GameObject, Receiver> ReciverDic = new Dictionary<GameObject, Receiver>();
 	public Dictionary<GameObject, NoteBase> NoteDic = new Dictionary<GameObject, NoteBase>();//存储note信息
 	private Receiver TargetReciver;//当前编辑的接收器
 
 	private void Awake()
-    {
+	{
 		Note = BlackClick;
-        if (DataManager.NoteData.Count==0)//新谱面应至少有一个接收器
-        {
-			Receiver r = new Receiver(1.0,255,640,360);//默认构造接收器
+		if (DataManager.NoteData.Count == 0)//新谱面应至少有一个接收器
+		{
+			Receiver r = new Receiver(1.0, 255, 640, 360);//默认构造接收器
 			DataManager.NoteData.Add(r);
 			TargetReciver = r;
 		}
 	}
-	private void Update()
+	void Update()
 	{
 		if (FatherObject.activeSelf)//避免误触
 		{
-			
-			if (Input.GetMouseButtonDown(0) && Input.mousePosition.x < 423)//左键按下，且必须在左半屏
-			{
-				if (!EventSystem.current.IsPointerOverGameObject())//如果没点到UI上
-				{
-					mousePosition = Input.mousePosition;//获取鼠标点击位置
-														//Debug.Log(mousePosition);
-					targetPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 14f));
-					//转换世界坐标
-					Note.transform.position = targetPosition;
-				}
-			}
-			else if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > 423)
-			{//右半屏幕面板操作
-				Debug.Log("点击了右半屏幕");
-				//待处理
-			}
-
-			if (Input.GetMouseButtonUp(0) && Input.mousePosition.x < 423)//左键抬起放置音符，且必须在左半屏
+			if (Input.GetMouseButtonUp(0) && Input.mousePosition.x < 423)//左键抬起放置音符，且必须在左半屏MOUS
 			{
 				if (!EventSystem.current.IsPointerOverGameObject()) //如果没点到UI上
 				{
-					mousePosition = Input.mousePosition;//获取鼠标点击位置
-					endPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 14f));
-					//转换世界坐标
+					mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);//转换世界坐标
 					if (NoteDelete)//判断音符操作模式
 						NoteInput_Delete();
 					else
 						NoteInput();
 				}
-				else if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > 423)
-				{//右半屏幕面板操作
-					Debug.Log("点击了右半屏幕");
-					//待处理
+			}
+			else if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > 423)
+			{
+				Debug.Log("点击右半屏幕");
+				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				RaycastHit hit;
+				if (Physics.Raycast(ray, out hit) && hit.collider.gameObject == ReceiverPanel)
+				{
+					Debug.Log("点击了接收器面板");
 				}
 			}
-			
 		}
-		
 	}
 	void NoteInput()
     {
         if (index != 4)//非hold音符统一采用此方式
         {
-			GameObject note = Instantiate(Note, Note.transform.position, Note.transform.rotation, FatherObject.transform);
+			GameObject note = Instantiate(Note, mousePosition, Note.transform.rotation, FatherObject.transform);
 			//编辑面板实例化一个2d音符对象
 			NoteBase notemes = new NoteBase(SetPosition(note) * GameTime.secPerBeat, index, Angle, 1, false);
 			//音符信息实例化
@@ -97,7 +82,6 @@ public class NoteDataManager : MonoBehaviour
 			//实例化Hold音符方法
 			Debug.Log("实例化Hold音符");
 			GameObject note = Instantiate(Note, Note.transform.position, Note.transform.rotation, FatherObject.transform);
-			float ftime = 0.0f;
 			NoteBase notemes = new NoteBase(SetPosition(note) * GameTime.secPerBeat,
 				GetEndPosition() * GameTime.secPerBeat, index, 0, 1, false);
 			Debug.Log(notemes.start_time);
