@@ -18,7 +18,6 @@ public class GameTime : MonoBehaviour
     public InputField inputTimeString;
     public InputField inputBeatCut;
     public InputField inputBPM, inputAudioOffset;
-    public GameObject Receiver;
     public AudioSource songs;
 
     public static float songsLength;//给Line用的变量

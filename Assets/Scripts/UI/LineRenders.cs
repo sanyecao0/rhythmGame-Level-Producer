@@ -39,7 +39,7 @@ public class LineRenders : MonoBehaviour
         {
             if (i % GameTime.BeatCutCount == 0)//画线
             {
-                LineRenderer line = Instantiate(BarCutLine, new Vector3(-8, -4 + i * LineSpacing, 15), BarCutLine.transform.rotation, FatherObject.transform);
+                LineRenderer line = Instantiate(BarCutLine, new Vector3(-8, -4 + i * LineSpacing, 8), BarCutLine.transform.rotation, FatherObject.transform);
                 CutLine c = new CutLine();
                 c.LineTime = i * GameTime.secPerBeat/GameTime.BeatCutCount;//计算当前线的时间点
                 linesData.Add(c);
@@ -48,7 +48,7 @@ public class LineRenders : MonoBehaviour
             }
             else
             {
-                LineRenderer cutline = Instantiate(SecCutLine, new Vector3(-8, -4 + i  *LineSpacing, 15), SecCutLine.transform.rotation, FatherObject.transform);
+                LineRenderer cutline = Instantiate(SecCutLine, new Vector3(-8, -4 + i  *LineSpacing, 8), SecCutLine.transform.rotation, FatherObject.transform);
                 CutLine c = new CutLine();
                 c.LineTime = i * GameTime.secPerBeat / GameTime.BeatCutCount;//计算当前线的时间点
                 linesData.Add(c);
