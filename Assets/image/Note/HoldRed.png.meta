@@ -132,19 +132,40 @@ TextureImporter:
       name: Hold_0
       rect:
         serializedVersion: 2
-        x: 32
+        x: 39
         y: 76
-        width: 340
-        height: 460
-      alignment: 9
-      pivot: {x: 0.494, y: 0.00000001658564}
-      border: {x: 0, y: 0, z: 4, w: 0}
+        width: 328
+        height: 66
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 174971a5bbef87944b40179266e002a2
       internalID: -373405868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HoldRed_0
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 140
+        width: 253
+        height: 331
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9a010ce1f4de82469784935e7e8a4ef
+      internalID: -1991711901
       vertices: []
       indices: 
       edges: []
@@ -160,6 +181,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      HoldRed_0: -1991711901
       Hold_0: -373405868
   spritePackingTag: 
   pSDRemoveMatte: 0

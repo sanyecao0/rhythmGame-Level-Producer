@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Line
+  - VerticalLine
+  - HorizontalLine
+  - Note
+  - Receiver
   layers:
   - Default
   - TransparentFX

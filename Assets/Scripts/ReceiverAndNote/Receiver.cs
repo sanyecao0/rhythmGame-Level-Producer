@@ -6,11 +6,11 @@ public class Receiver
 {
     public double size;//接收器放大倍率
     public int alpha;//接收器图片alpha值
-    public double Position_x;//初始化坐标x
-    public double Position_y;//初始化坐标y
+    public float Position_x;//初始化坐标x
+    public float Position_y;//初始化坐标y
     public  List<NoteBase> Note=new List<NoteBase>(); //音符列表                                                     
    
-    public Receiver (double size,int alpha,double x,double y)
+    public Receiver (double size,int alpha,float x,float y)
     {
         this.size = size;
         this.alpha = alpha;

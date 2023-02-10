@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3719930250395264358}
   - component: {fileID: 6392877172631914346}
   m_Layer: 0
-  m_Name: UP
+  m_Name: sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: -6927277421276326148}
   m_Layer: 0
   m_Name: Flick
-  m_TagString: Untagged
+  m_TagString: Note
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

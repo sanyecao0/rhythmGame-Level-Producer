@@ -1,8 +1,7 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.Net;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class NoteDataManager : MonoBehaviour
@@ -13,69 +12,110 @@ public class NoteDataManager : MonoBehaviour
 	public GameObject Flick;
 	public GameObject Hold;
 	public GameObject Drag;
-
+	public GameObject ReceiverObject;
 
 	public GameObject Note;
 	public GameObject FatherObject;
-	public GameObject ReceiverPanel;
 	public static int index;//音符索引
 	public static float Angle = 0;//生成角度,默认为0°即正上方
 	public InputField inputAngle;//绑定角度输入框
 	public bool NoteDelete = false;
-	private Vector3 mousePosition, targetPosition, endPosition;
+	private Vector3 mousePosition, endPosition;
+	GameObject[] lines;//存储所有线信息
 
-	public Dictionary<GameObject, Receiver> ReciverDic = new Dictionary<GameObject, Receiver>();
-	public Dictionary<GameObject, NoteBase> NoteDic = new Dictionary<GameObject, NoteBase>();//存储note信息
-	private Receiver TargetReciver;//当前编辑的接收器
+	public static Dictionary<GameObject, NoteBase> NoteDic = new Dictionary<GameObject, NoteBase>();//存储note信息
+	public static Receiver TargetReceiver;//当前编辑的接收器
 
-	private void Awake()
+	private void Start()
 	{
 		Note = BlackClick;
-		if (DataManager.NoteData.Count == 0)//新谱面应至少有一个接收器
-		{
-			Receiver r = new Receiver(1.0, 255, 640, 360);//默认构造接收器
-			DataManager.NoteData.Add(r);
-			TargetReciver = r;
-		}
+		lines = GameObject.FindGameObjectsWithTag("Line");
+		TargetReceiver = ReceiverManager.ReciverDic[ReceiverManager.TargetReceiver];
 	}
 	void Update()
 	{
 		if (FatherObject.activeSelf)//避免误触
 		{
-			if (Input.GetMouseButtonUp(0) && Input.mousePosition.x < 423)//左键抬起放置音符，且必须在左半屏MOUS
+			if (Input.GetMouseButtonUp(0) && Input.mousePosition.x < 423)//左键抬起放置音符，且必须在左半屏
 			{
-				if (!EventSystem.current.IsPointerOverGameObject()) //如果没点到UI上
-				{
 					mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);//转换世界坐标
 					if (NoteDelete)//判断音符操作模式
 						NoteInput_Delete();
 					else
 						NoteInput();
-				}
 			}
 			else if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > 423)
 			{
 				Debug.Log("点击右半屏幕");
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				RaycastHit hit;
-				if (Physics.Raycast(ray, out hit) && hit.collider.gameObject == ReceiverPanel)
+				if (Physics.Raycast(ray, out hit) && hit.collider.gameObject==ReceiverObject)//隐患
 				{
-					Debug.Log("点击了接收器面板");
+					TargetReceiver = ReceiverManager.ReciverDic[hit.collider.gameObject];
+					Debug.Log(TargetReceiver.Position_x);
 				}
 			}
 		}
 	}
+	public static void ClearReceiverNoteData()//清空被删除的接收器的内容音符
+    {
+		List<NoteBase> note = new List<NoteBase>(TargetReceiver.Note);
+        try
+        {
+			foreach (KeyValuePair<GameObject, NoteBase> kvp in NoteDic)//众所周知，不要用Foreach修改集合，所以这可能需要修改
+			{
+				for (int j = 0; j < TargetReceiver.Note.Count; j++)
+				{
+					if (kvp.Value == note[j])
+					{
+						NoteDic.Remove(kvp.Key);
+						DestroyImmediate(kvp.Key);
+						Debug.Log("完成");
+						break;
+					}
+				}
+			}
+		}
+        catch(InvalidOperationException e)
+		{
+		}
+		TargetReceiver.Note.Clear();
+	}
+	public static void RefreshReceiverNoteData()//根据选定的音符刷新编辑界面
+    {
+		    TargetReceiver = ReceiverManager.ReciverDic[ReceiverManager.TargetReceiver];
+			GameObject[] Notes= GameObject.FindGameObjectsWithTag("Note");
+		    foreach (GameObject n in Notes)
+            {
+			   n.SetActive(false);
+			   //Debug.Log("关闭一次");
+			}
+		   // Debug.Log("关闭完成");
+			foreach (KeyValuePair<GameObject, NoteBase> kvp in NoteDic)//遍历当前所有音符信息
+			{
+				foreach (NoteBase note in TargetReceiver.Note)
+				{
+					if (kvp.Value==note)
+					{
+						Debug.Log(kvp.Key.transform.position.x+"Foreach IN");
+						kvp.Key.SetActive(true);
+						break;
+					}
+				}		
+			}
+    }
 	void NoteInput()
     {
         if (index != 4)//非hold音符统一采用此方式
         {
 			GameObject note = Instantiate(Note, mousePosition, Note.transform.rotation, FatherObject.transform);
+			note.name = "Note";
 			//编辑面板实例化一个2d音符对象
 			NoteBase notemes = new NoteBase(SetPosition(note) * GameTime.secPerBeat, index, Angle, 1, false);
 			//音符信息实例化
-			Debug.Log(notemes.start_time);
 			NoteDic.Add(note, notemes);//根据字典绑定音符信息和unity2d对象
-			TargetReciver.Note.Add(notemes);//存入当前指定接收器的note列表
+			TargetReceiver.Note.Add(notemes);//存入当前指定接收器的note列表
+			Debug.Log(TargetReceiver.Position_x);
 		}
         else
         {
@@ -84,30 +124,26 @@ public class NoteDataManager : MonoBehaviour
 			GameObject note = Instantiate(Note, Note.transform.position, Note.transform.rotation, FatherObject.transform);
 			NoteBase notemes = new NoteBase(SetPosition(note) * GameTime.secPerBeat,
 				GetEndPosition() * GameTime.secPerBeat, index, 0, 1, false);
+			note.name = "Note";
+			//Note.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();//获取对象的子对象的sprite的方法
 			Debug.Log(notemes.start_time);
 			Debug.Log(notemes.Finish_time);
 			NoteDic.Add(note, notemes);//根据字典绑定音符信息和unity2d对象
-			TargetReciver.Note.Add(notemes);//存入当前指定接收器的note列表
+			TargetReceiver.Note.Add(notemes);//存入当前指定接收器的note列表
         }
 	}
 	void NoteInput_Delete()
     {
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
-			if (Physics.Raycast(ray, out hit))
-			{
-			//Debug.Log(hit.collider.gameObject);
-			TargetReciver.Note.Remove(NoteDic[hit.collider.gameObject]);//移出当前接收器note序列
+			if (Physics.Raycast(ray, out hit)&& hit.collider.gameObject.name=="Note"&& hit.collider.gameObject.activeSelf)
+		    { 
+			TargetReceiver.Note.Remove(NoteDic[hit.collider.gameObject]);//移出当前接收器note序列
 			NoteDic.Remove(hit.collider.gameObject);//移出字典
 			DestroyImmediate(hit.collider.gameObject);//删除实例化的u2d对象
 		    }
 	}
-	Vector3 GetNotePos()
-	{//坐标转换
-		Vector3 imagePos;
-		RectTransformUtility.ScreenPointToWorldPointInRectangle(Note.transform.parent as RectTransform, Input.mousePosition, null, out imagePos);
-		return imagePos;
-	}
+
 	private void NoteChoose()
     {
         switch (index) {
@@ -145,8 +181,6 @@ public class NoteDataManager : MonoBehaviour
     }
 	private int SetPosition(GameObject NOTE)
 	{
-			GameObject[] lines;//存储所有线信息
-			lines = GameObject.FindGameObjectsWithTag("Line");
 			GameObject TargetObject = lines[0];//默认初始化
 			float diff = (lines[0].transform.position.y - NOTE.transform.position.y);//计算y距离差值
 			diff = Mathf.Abs(diff);//取绝对值
