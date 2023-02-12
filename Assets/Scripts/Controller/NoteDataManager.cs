@@ -38,11 +38,7 @@ public class NoteDataManager : MonoBehaviour
 	{
 		if (FatherObject.activeSelf)//é¿å…è¯¯è§¦
 		{
-<<<<<<< HEAD
-			if (Input.GetMouseButtonUp(0) && Input.mousePosition.x < 423&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())//×ó¼üÌ§Æğ·ÅÖÃÒô·û£¬ÇÒ±ØĞëÔÚ×ó°ëÆÁ
-=======
-			if (Input.GetMouseButtonUp(0) && Input.mousePosition.x < 423)//å·¦é”®æŠ¬èµ·æ”¾ç½®éŸ³ç¬¦ï¼Œä¸”å¿…é¡»åœ¨å·¦åŠå±
->>>>>>> 038fab1b715826523ac4091a8e1e4de63ba90dc1
+			if (Input.GetMouseButtonUp(0) && Input.mousePosition.x < 423&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())//ï¿½ï¿½ï¿½Ì§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			{
 					
 					endPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 14f));
@@ -57,11 +53,7 @@ public class NoteDataManager : MonoBehaviour
 			}
 			else if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > 423)
 			{
-<<<<<<< HEAD
-				//Debug.Log("µã»÷ÓÒ°ëÆÁÄ»");
-=======
 				Debug.Log("ç‚¹å‡»å³åŠå±å¹•");
->>>>>>> 038fab1b715826523ac4091a8e1e4de63ba90dc1
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				RaycastHit hit;
 				if (Physics.Raycast(ray, out hit) && hit.collider.gameObject==ReceiverObject)//éšæ‚£
@@ -207,16 +199,10 @@ public class NoteDataManager : MonoBehaviour
     }
 	private int SetPosition(GameObject NOTE)
 	{
-<<<<<<< HEAD
 		lines = GameObject.FindGameObjectsWithTag("Line");
-		GameObject TargetObject = lines[0];//Ä¬ÈÏ³õÊ¼»¯
-			float diff = (lines[0].transform.position.y - NOTE.transform.position.y);//¼ÆËãy¾àÀë²îÖµ
-			diff = Mathf.Abs(diff);//È¡¾ø¶ÔÖµ
-=======
-			GameObject TargetObject = lines[0];//é»˜è®¤åˆå§‹åŒ–
-			float diff = (lines[0].transform.position.y - NOTE.transform.position.y);//è®¡ç®—yè·ç¦»å·®å€¼
-			diff = Mathf.Abs(diff);//å–ç»å¯¹å€¼
->>>>>>> 038fab1b715826523ac4091a8e1e4de63ba90dc1
+		GameObject TargetObject = lines[0];//Ä¬ï¿½Ï³ï¿½Ê¼ï¿½ï¿½
+			float diff = (lines[0].transform.position.y - NOTE.transform.position.y);//ï¿½ï¿½ï¿½ï¿½yï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+			diff = Mathf.Abs(diff);//È¡ï¿½ï¿½ï¿½ï¿½Öµ
 			float Target = diff;
 			foreach (GameObject l in lines)//éå†æ‰€æœ‰æ—¶é—´çº¿
 			{
