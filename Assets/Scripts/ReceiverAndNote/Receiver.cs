@@ -8,21 +8,35 @@ public class Receiver
     public int alpha;//接收器图片alpha值
     public float Position_x;//初始化坐标x
     public float Position_y;//初始化坐标y
-    public  List<NoteBase> Note=new List<NoteBase>(); //音符列表                                                     
+    public  List<NoteBase> Note=new List<NoteBase>(); //音符列表
+    public List<ReceiverEvent> Event = new List<ReceiverEvent>();//接收器事件列表
    
-    public Receiver (double size,int alpha,float x,float y)
+}
+public class ReceiverEvent//0大小 1位置 2透明度
+{
+    public int EventType;
+    public float start_Time;
+    public float end_Time;
+    public string formula;
+    public string Target;
+    public ReceiverEvent(int type, float BeginTime, float FinishTime, string formula, string Target)
     {
-        this.size = size;
-        this.alpha = alpha;
-        this.Position_x = x;
-        this.Position_y = y;
+        this.EventType = type;
+       this.start_Time = BeginTime;
+        this.end_Time = FinishTime;
+        this.formula = formula;
+        this.Target = Target;
     }
 }
-public class ReciverEvent//接收器事件类（后续修改）
+public class ReceiverMes
 {
-    public int type;
-    public double BeginTime;
-    public double FinishTime;
-    public int FormulaType;
-    public int TargetAlpha;
+    public Receiver Receiver=new Receiver();
+    public ReceiverMes(double size, int alpha, float x, float y)
+    {
+        Receiver.size = size;
+        Receiver.alpha = alpha;
+        Receiver.Position_x = x;
+        Receiver.Position_y = y;
+    }
 }
+

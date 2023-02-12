@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class ReceiverManager : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class ReceiverManager : MonoBehaviour
     private SpriteRenderer Receiversprite;
     public static GameObject TargetReceiver;//当前编辑接收器
 
-    public static Dictionary<GameObject, Receiver> ReciverDic = new Dictionary<GameObject, Receiver>();//保存所有接收器信息
+    public static Dictionary<GameObject, ReceiverMes> ReceiverDic = new Dictionary<GameObject, ReceiverMes>();//保存所有接收器信息
     bool isDelete = false;
     GameObject[] Vlines;//存储竖线信息
     GameObject[] Hlines;//存储横线信息
@@ -24,16 +25,17 @@ public class ReceiverManager : MonoBehaviour
     {
         Vlines = GameObject.FindGameObjectsWithTag("VerticalLine");
         Hlines = GameObject.FindGameObjectsWithTag("HorizontalLine");
-        if (DataManager.NoteData.Count == 0)//新谱面应至少有一个接收器
+        if (Data.data.NoteData.Count == 0)//新谱面应至少有一个接收器
         {
-            Receiver r = new Receiver(1.0, 255, 640, 360);//默认构造接收器
-            NoteDataManager.TargetReceiver = r;//为nOTE编辑区赋值
-            TargetReceiver = Instantiate(ReceiverObject,new Vector3(r.Position_x/160-1,r.Position_y/-160,8) , 
+            ReceiverMes r = new ReceiverMes(1.0, 255, 640, 360);//默认构造接收器
+            NoteDataManager.TargetReceiver = r.Receiver;//为nOTE编辑区赋值
+            EventManager.TargetReceiver = r;
+            TargetReceiver = Instantiate(ReceiverObject,new Vector3(r.Receiver.Position_x/160-1,r.Receiver.Position_y/-160,8) , 
             ReceiverObject.transform.rotation, FatherObject.transform);
-           // NoteDataManager.TargetReceiverObj = TargetReceiver;//同步信息
+            Debug.Log(TargetReceiver);
             ChooseReceiverColor();
-            DataManager.NoteData.Add(r);
-            ReciverDic.Add(TargetReceiver, r);
+            Data.data.NoteData.Add(r);
+            ReceiverDic.Add(TargetReceiver, r);
         }
     }
     void Update()
@@ -82,8 +84,9 @@ public class ReceiverManager : MonoBehaviour
     }
     private void ChangedReceiver()//修改接收器
     {
-        NoteDataManager.TargetReceiver = ReciverDic[TargetReceiver];//修改value
+        NoteDataManager.TargetReceiver = ReceiverDic[TargetReceiver].Receiver;//修改value
         NoteDataManager.RefreshReceiverNoteData();
+        EventManager.TargetReceiver = ReceiverDic[TargetReceiver];
         ChooseReceiverColor();
     }
     private void ChooseReceiverColor()//修改选中接收器配色
@@ -104,9 +107,9 @@ public class ReceiverManager : MonoBehaviour
         TargetReceiver = Instantiate(ReceiverObject, mousePosition, ReceiverObject.transform.rotation, FatherObject.transform);
         SetPosition(TargetReceiver);
         ChooseReceiverColor();
-        Receiver r = new Receiver(1, 255, TargetReceiver.transform.localPosition.x * 320, TargetReceiver.transform.localPosition.y * -320);
-        ReciverDic.Add(TargetReceiver, r);//加入字典绑定
-        DataManager.NoteData.Add(r);//加入谱面信息
+        ReceiverMes r = new ReceiverMes(1, 255, TargetReceiver.transform.localPosition.x * 320, TargetReceiver.transform.localPosition.y * -320);
+        ReceiverDic.Add(TargetReceiver, r);//加入字典绑定
+        Data.data.NoteData.Add(r);//加入谱面信息
         NoteDataManager.RefreshReceiverNoteData();
     }
     private void SetPosition(GameObject TargetReceiver)//接收器吸附固定位置
@@ -151,12 +154,19 @@ public class ReceiverManager : MonoBehaviour
             ChangeChoose();
             Debug.Log("删除");
             NoteDataManager.ClearReceiverNoteData();//清除该接收器下所有2d对象和notebase数据
-            DataManager.NoteData.Remove(ReciverDic[hit.collider.gameObject]);//移出谱面
-            ReciverDic.Remove(hit.collider.gameObject);//移出字典
+            Data.data.NoteData.Remove(ReceiverDic[hit.collider.gameObject]);//移出谱面
+            ReceiverDic.Remove(hit.collider.gameObject);//移出字典
             DestroyImmediate(hit.collider.gameObject);//删除实例化的u2d对象
             GameObject[] Rec= GameObject.FindGameObjectsWithTag("Receiver");//防止对象滞空
-            TargetReceiver = Rec[0];
-            ChangedReceiver();
+            try
+            {
+                TargetReceiver = Rec[0];
+                ChangedReceiver();
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return;
+            }
         }
     }
     public void SetDelete()

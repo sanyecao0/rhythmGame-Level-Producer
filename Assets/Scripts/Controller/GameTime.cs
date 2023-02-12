@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 using System;
 
 public class GameTime : MonoBehaviour
@@ -19,14 +20,14 @@ public class GameTime : MonoBehaviour
     public InputField inputBeatCut;
     public InputField inputBPM, inputAudioOffset;
     public AudioSource songs;
+    public GameObject Mask;
 
     public static float songsLength;//给Line用的变量
 
     bool BPMChange = true;
     private void Awake()
     {
-        songsLength = songs.clip.length;
-        //Debug.Log("长度" + songsLength);
+        StartCoroutine(LoadOGG());
         if (Basic_BPM != 0 && BPMChange)
         {
             BPM = Basic_BPM;
@@ -50,6 +51,20 @@ public class GameTime : MonoBehaviour
         }
         //����ת��bpm��secPerBeat���淽��ʹ�á�secPerBeat�����ڼ�������еĸ���λ�ã�����������ɷǳ���Ҫ��   
         //������dsptimesong��¼�����Ŀ�ʼʱ�䡣ʹ��AudioSettings.dspTime ���ٸ�����λ�á�
+    }
+    IEnumerator LoadOGG()
+    {
+        var uwr = UnityWebRequestMultimedia.GetAudioClip(LevelReadAndWrite.SongsPath, AudioType.OGGVORBIS);
+            //Debug.Log("读取");
+            yield return uwr.SendWebRequest();
+            if (uwr.result !=UnityWebRequest.Result.ConnectionError)
+            {
+              AudioClip clip =DownloadHandlerAudioClip.GetContent(uwr);
+            songs.clip = clip;
+            songsLength = songs.clip.length;
+            LineRenders.SongCutNum = (songsLength * Basic_BPM / 60f);
+            Mask.SetActive(false);//取消遮罩
+        }
     }
     public void inputTime()//主动调整播放位置接口
     {

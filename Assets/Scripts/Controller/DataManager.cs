@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
+[Serializable]
 public class DataManager
 {   
-    public static List<Receiver> NoteData = new List<Receiver>();
-    public static List<OtherEvents> OtherEvent = new List<OtherEvents>();
-} 
+    public  List<ReceiverMes> NoteData = new List<ReceiverMes>();
+    public  List<OtherEvents> OtherEvent = new List<OtherEvents>();
+}
+public class Data
+{
+    public static DataManager data=new DataManager();
+}
 

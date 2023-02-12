@@ -30,13 +30,12 @@ public class NoteDataManager : MonoBehaviour
 	{
 		Note = BlackClick;
 		lines = GameObject.FindGameObjectsWithTag("Line");
-		TargetReceiver = ReceiverManager.ReciverDic[ReceiverManager.TargetReceiver];
 	}
 	void Update()
 	{
 		if (FatherObject.activeSelf)//避免误触
 		{
-			if (Input.GetMouseButtonUp(0) && Input.mousePosition.x < 423)//左键抬起放置音符，且必须在左半屏
+			if (Input.GetMouseButtonUp(0) && Input.mousePosition.x < 423&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())//左键抬起放置音符，且必须在左半屏
 			{
 					mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);//转换世界坐标
 					if (NoteDelete)//判断音符操作模式
@@ -46,12 +45,12 @@ public class NoteDataManager : MonoBehaviour
 			}
 			else if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > 423)
 			{
-				Debug.Log("点击右半屏幕");
+				//Debug.Log("点击右半屏幕");
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				RaycastHit hit;
 				if (Physics.Raycast(ray, out hit) && hit.collider.gameObject==ReceiverObject)//隐患
 				{
-					TargetReceiver = ReceiverManager.ReciverDic[hit.collider.gameObject];
+					TargetReceiver = ReceiverManager.ReceiverDic[hit.collider.gameObject].Receiver;
 					Debug.Log(TargetReceiver.Position_x);
 				}
 			}
@@ -76,14 +75,15 @@ public class NoteDataManager : MonoBehaviour
 				}
 			}
 		}
-        catch(InvalidOperationException e)
+        catch(InvalidOperationException)
 		{
+			return;
 		}
 		TargetReceiver.Note.Clear();
 	}
 	public static void RefreshReceiverNoteData()//根据选定的音符刷新编辑界面
     {
-		    TargetReceiver = ReceiverManager.ReciverDic[ReceiverManager.TargetReceiver];
+		    TargetReceiver = ReceiverManager.ReceiverDic[ReceiverManager.TargetReceiver].Receiver;
 			GameObject[] Notes= GameObject.FindGameObjectsWithTag("Note");
 		    foreach (GameObject n in Notes)
             {
@@ -181,7 +181,8 @@ public class NoteDataManager : MonoBehaviour
     }
 	private int SetPosition(GameObject NOTE)
 	{
-			GameObject TargetObject = lines[0];//默认初始化
+		lines = GameObject.FindGameObjectsWithTag("Line");
+		GameObject TargetObject = lines[0];//默认初始化
 			float diff = (lines[0].transform.position.y - NOTE.transform.position.y);//计算y距离差值
 			diff = Mathf.Abs(diff);//取绝对值
 			float Target = diff;
