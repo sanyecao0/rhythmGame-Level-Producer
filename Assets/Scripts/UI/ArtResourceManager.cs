@@ -7,10 +7,10 @@ using UnityEngine.Networking;
 public class ArtResourceManager : MonoBehaviour
 {
     public Image image;
-    private void Awake()
+   /* private void Awake()
     {
         StartCoroutine(GetImgAndOGG());
-    }
+    }*/
     IEnumerator GetImgAndOGG()
     {
             TextureToSprite(ReturnImgByte(LevelReadAndWrite.CoverPath));

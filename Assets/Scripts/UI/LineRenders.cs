@@ -17,6 +17,7 @@ public class LineRenders : MonoBehaviour
     void Start()
     {
         //SongCutNum = (GameTime.songsLength * GameTime.Basic_BPM / 60f);//算出小节数,生成对应长度线
+        //Debug.Log(SongCutNum);
         BeatCut = GameTime.BeatCutCount;
         LineDraw();
     }

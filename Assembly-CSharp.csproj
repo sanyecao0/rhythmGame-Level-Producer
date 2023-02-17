@@ -58,16 +58,13 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\UI\Tips.cs" />
     <Compile Include="Assets\Scripts\Controller\NoteDataManager.cs" />
+    <Compile Include="Assets\Scripts\UI\EventLines.cs" />
     <Compile Include="Assets\Scripts\Controller\ReceiverManager.cs" />
-    <Compile Include="Assets\Scripts\Controller\DataManager.cs" />
+    <Compile Include="Assets\Scripts\DataManager.cs" />
     <Compile Include="Assets\Scripts\UI\LineRenders.cs" />
-    <Compile Include="Assets\Scripts\ReceiverAndNote\NoteBase.cs" />
     <Compile Include="Assets\Scripts\UI\FollowPlayer.cs" />
-    <Compile Include="Assets\Scripts\ReceiverAndNote\Receiver.cs" />
     <Compile Include="Assets\Scripts\Controller\EventManager.cs" />
-    <Compile Include="Assets\Scripts\Controller\TimingGroup.cs" />
     <Compile Include="Assets\Scripts\UI\ArtResourceManager.cs" />
-    <Compile Include="Assets\Scripts\ReceiverAndNote\Event.cs" />
     <Compile Include="Assets\Scripts\Controller\LevelReadAndWrite.cs" />
     <Compile Include="Assets\Scripts\UI\OpenFile.cs" />
     <Compile Include="Assets\Scripts\Controller\GameTime.cs" />

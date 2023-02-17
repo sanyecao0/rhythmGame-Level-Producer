@@ -7,7 +7,7 @@ using System;
 
 public class GameTime : MonoBehaviour
 {
-    public static float Basic_BPM=180;//基础BPM
+    public static float Basic_BPM=120;//基础BPM
     public static float BPM;//BPM
     public static float songPosition;//歌曲位置
     public static float songPosInBeats;//记录当前所在节拍
@@ -27,7 +27,7 @@ public class GameTime : MonoBehaviour
     bool BPMChange = true;
     private void Awake()
     {
-        StartCoroutine(LoadOGG());
+        StartCoroutine(LoadResource());
         if (Basic_BPM != 0 && BPMChange)
         {
             BPM = Basic_BPM;
@@ -49,20 +49,26 @@ public class GameTime : MonoBehaviour
             songPosInBeats = songPosition / secPerBeat;//获得当前节拍位置
             inputTimeString.text = Convert.ToDouble(songs.time).ToString("0.000");//实时刷新歌曲位置
         }
-        //����ת��bpm��secPerBeat���淽��ʹ�á�secPerBeat�����ڼ�������еĸ���λ�ã�����������ɷǳ���Ҫ��   
-        //������dsptimesong��¼�����Ŀ�ʼʱ�䡣ʹ��AudioSettings.dspTime ���ٸ�����λ�á�
     }
-    IEnumerator LoadOGG()
+    IEnumerator LoadResource()
     {
         var uwr = UnityWebRequestMultimedia.GetAudioClip(LevelReadAndWrite.SongsPath, AudioType.OGGVORBIS);
             //Debug.Log("读取");
             yield return uwr.SendWebRequest();
             if (uwr.result !=UnityWebRequest.Result.ConnectionError)
             {
-              AudioClip clip =DownloadHandlerAudioClip.GetContent(uwr);
+             AudioClip clip =DownloadHandlerAudioClip.GetContent(uwr);
             songs.clip = clip;
             songsLength = songs.clip.length;
             LineRenders.SongCutNum = (songsLength * Basic_BPM / 60f);
+            EventLines.SongCutNum = (songsLength * Basic_BPM / 60f);
+            /*while (true)
+            {
+                if (NoteDataManager.Ready && ReceiverManager.Ready && EventManager.Ready)
+                    break;
+                else
+                    continue;
+            }*/
             Mask.SetActive(false);//取消遮罩
         }
     }
