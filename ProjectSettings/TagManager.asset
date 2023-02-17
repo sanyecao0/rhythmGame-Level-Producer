@@ -9,6 +9,9 @@ TagManager:
   - HorizontalLine
   - Note
   - Receiver
+  - EventLine
+  - Event
+  - OtherEvents
   layers:
   - Default
   - TransparentFX

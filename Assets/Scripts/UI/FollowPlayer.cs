@@ -6,6 +6,8 @@ using System;
 
 public class FollowPlayer : MonoBehaviour
 {
+    public GameObject NoteData;
+    public GameObject EventData;
     //面板滑动与播放控制
     float scale = 1.05f;
     bool isPlay = false;
@@ -16,39 +18,45 @@ public class FollowPlayer : MonoBehaviour
         if (isPlay)
         {
             float move = Time.deltaTime * -5.25f;
-            transform.Translate(0, move, 0);
+            NoteData.transform.Translate(0, move, 0);
+            EventData.transform.Translate(0, move, 0);
         }
         else
         {
             //通过键盘滑轮控制物体的缩放
             if (Input.GetAxis("Mouse ScrollWheel") > 0)
             {
-                if (transform.position.y <= 0)
+                if (NoteData.transform.position.y < 0 && EventData.transform.position.y < 0)
                 {
                     MoveUP();
                 }
             }
             else if (Input.GetAxis("Mouse ScrollWheel") < 0)
             {
-                MoveDown();
+                if (NoteData.transform.position.y <= 0&&EventData.transform.position.y <= 0)
+                {
+                    MoveDown();
+                }
             }
           }
         }
     private void MoveUP()
     {
-        transform.position += new Vector3(0, 1 * scale);
+        NoteData.transform.position += new Vector3(0, 1 * scale);
+        EventData.transform.position += new Vector3(0, 1 * scale);
         songs.time = songs.time - scale / 5.25f;
         inputTimeString.text = Convert.ToDouble(songs.time).ToString("0.000");
-        Debug.Log("减时间");//如果进入编辑界面时没有点击播放按钮，那么该方法无效
-        Debug.Log(songs.time);
+        //Debug.Log("减时间");
+       // Debug.Log(songs.time);
     }
     private void MoveDown()
     {
-        transform.position -= new Vector3(0, 1 * scale);
+        NoteData.transform.position -= new Vector3(0, 1 * scale);
+        EventData.transform.position -= new Vector3(0, 1 * scale);
         songs.time = songs.time + scale / 5.25f;
         inputTimeString.text = Convert.ToDouble(songs.time).ToString("0.000");
-        Debug.Log("加时间");//如果进入编辑界面时没有点击播放按钮，那么该方法无效
-        Debug.Log(songs.time);
+       // Debug.Log("加时间");
+       // Debug.Log(songs.time);
     }
     public void MusicPlay()
     {

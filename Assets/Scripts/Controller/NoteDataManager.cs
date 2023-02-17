@@ -1,5 +1,5 @@
-using System.Collections;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,86 +14,201 @@ public class NoteDataManager : MonoBehaviour
 	public GameObject Drag;
 	public GameObject ReceiverObject;
 
+	public float Scale;
 	public GameObject Note;
 	public GameObject FatherObject;
-	public static int index;//Òô·ûË÷Òı
-	public static float Angle = 0;//Éú³É½Ç¶È,Ä¬ÈÏÎª0¡ã¼´ÕıÉÏ·½
-	public InputField inputAngle;//°ó¶¨½Ç¶ÈÊäÈë¿ò
+	public GameObject DataPanel;
+	public Text time;
+	public InputField Degree;
+	public InputField Speed;
+	public Dropdown boolValue;
+
+	public GameObject ReceiverDataPanel;
+	public GameObject ReceiverEventDataPanle;
+	public InputField Size;
+	public InputField Alpha;
+	public Text PosX;
+	public Text PosY;
+
+	public static int index;//éŸ³ç¬¦ç´¢å¼•
+	public static float Angle = 0;//ç”Ÿæˆè§’åº¦,é»˜è®¤ä¸º0Â°å³æ­£ä¸Šæ–¹
+	public InputField inputAngle;//ç»‘å®šè§’åº¦è¾“å…¥æ¡†
 	public bool NoteDelete = false;
-	private Vector3 mousePosition, endPosition;
-	GameObject[] lines;//´æ´¢ËùÓĞÏßĞÅÏ¢
+	private bool HoldInput = false;
+	private Vector3 mousePosition; //endPosition;
 
-	public static Dictionary<GameObject, NoteBase> NoteDic = new Dictionary<GameObject, NoteBase>();//´æ´¢noteĞÅÏ¢
-	public static Receiver TargetReceiver;//µ±Ç°±à¼­µÄ½ÓÊÕÆ÷
+	 List<Vector3> HoldMousePosition = new List<Vector3>();
+	 List<GameObject> TargetLine = new List<GameObject>();
 
+	GameObject[] lines;//å­˜å‚¨æ‰€æœ‰çº¿ä¿¡æ¯
+
+	public static Dictionary<GameObject, Note> NoteDic = new Dictionary<GameObject, Note>();//å­˜å‚¨noteä¿¡æ¯
+	public static Receiver TargetReceiver;//å½“å‰ç¼–è¾‘çš„æ¥æ”¶å™¨
+	static Note TargetNote;
+	public static bool Ready = false;
 	private void Start()
 	{
+		Debug.Log("Start");
 		Note = BlackClick;
 		lines = GameObject.FindGameObjectsWithTag("Line");
-		TargetReceiver = ReceiverManager.ReciverDic[ReceiverManager.TargetReceiver];
+		StartCoroutine(LoadResourceData());
+		FatherObject.SetActive(false);
 	}
 	void Update()
 	{
-		if (FatherObject.activeSelf)//±ÜÃâÎó´¥
+		if (FatherObject.activeSelf)//é¿å…è¯¯è§¦
 		{
-			if (Input.GetMouseButtonUp(0) && Input.mousePosition.x < 423)//×ó¼üÌ§Æğ·ÅÖÃÒô·û£¬ÇÒ±ØĞëÔÚ×ó°ëÆÁ
+			if (Input.GetMouseButtonUp(0) && Input.mousePosition.x < 423&& UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()&&!HoldInput)//ï¿½ï¿½ï¿½Ì§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			{
-					mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);//×ª»»ÊÀ½ç×ø±ê
-					if (NoteDelete)//ÅĞ¶ÏÒô·û²Ù×÷Ä£Ê½
-						NoteInput_Delete();
-					else
-						NoteInput();
+			  mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 14f));
+			  if (NoteDelete)//åˆ¤æ–­éŸ³ç¬¦æ“ä½œæ¨¡å¼
+				NoteInput_Delete();
+			 else
+				NoteInput();
 			}
-			else if (Input.GetMouseButtonDown(0) && Input.mousePosition.x > 423)
+			else if(Input.GetMouseButtonUp(0) && Input.mousePosition.x < 423 &&HoldInput)//holdä¸“å±æ–¹æ³•
+            {
+				//Debug.Log(HoldMousePosition.Count);
+				HoldMousePosition.Add(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,Input.mousePosition.y,14f)));
+				if (HoldMousePosition.Count == 2)
+					HoldNoteInput();
+				else
+					TargetLine.Add(GetNearestLine(HoldMousePosition[0]));//æ‹¿åˆ°ç¬¬ä¸€ä¸ªç‚¹å‡»ä½ç½®çš„æœ€è¿‘çº¿æ¡
+			}
+			else if (Input.GetMouseButtonDown(1))//é€‰æ‹©æ¥æ”¶å™¨
 			{
-				Debug.Log("µã»÷ÓÒ°ëÆÁÄ»");
-				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-				RaycastHit hit;
-				if (Physics.Raycast(ray, out hit) && hit.collider.gameObject==ReceiverObject)//Òş»¼
-				{
-					TargetReceiver = ReceiverManager.ReciverDic[hit.collider.gameObject];
-					Debug.Log(TargetReceiver.Position_x);
+				if(Input.mousePosition.x > 423)
+                {
+					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+					RaycastHit hit;
+					if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.name == "Receiver(Clone)")//éšæ‚£
+					{
+						TargetReceiver = ReceiverManager.ReceiverDic[hit.collider.gameObject];
+						Debug.Log("ä¿®æ”¹æ¥æ”¶å™¨");
+						OpenRecDataPanel();
+					}
+				}
+                else//é€‰æ‹©éŸ³ç¬¦ï¼Œæ‰“å¼€è¯¦ç»†ä¿¡æ¯é¢æ¿
+                {
+					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+					RaycastHit hit;
+					if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.name=="Note")//éšæ‚£
+					{
+						TargetNote = NoteDic[hit.collider.gameObject];
+						OpenDataPanel();
+					}
 				}
 			}
 		}
 	}
-	public static void ClearReceiverNoteData()//Çå¿Õ±»É¾³ıµÄ½ÓÊÕÆ÷µÄÄÚÈİÒô·û
+	IEnumerator LoadResourceData()
     {
-		List<NoteBase> note = new List<NoteBase>(TargetReceiver.Note);
+		try
+		{
+			if (Data.root.NoteData.Count != 0)
+				for (int i = 0; i < Data.root.NoteData.Count; i++)
+				{
+					for (int j = 0; j < Data.root.NoteData[i].Note.Count; j++)
+					{
+						int type = Data.root.NoteData[i].Note[j].type;
+
+						if (type != 4)
+						{
+							GameObject note = Instantiate(GetNoteType(Data.root.NoteData[i].Note[j].type),
+							new Vector3(-6.5f, -4+Data.root.NoteData[i].Note[j].start_time * 5.25f, 8),
+							GetNoteType(Data.root.NoteData[i].Note[j].type).transform.rotation, FatherObject.transform);
+							note.name = "Note";
+							NoteDic.Add(note, Data.root.NoteData[i].Note[j]);
+						}
+						else if (type == 4)
+						{
+							GameObject note = Instantiate(GetNoteType(Data.root.NoteData[i].Note[j].type),
+							new Vector3(-6.5f, -4+Data.root.NoteData[i].Note[j].start_time * 5.25f, 8),
+							GetNoteType(Data.root.NoteData[i].Note[j].type).transform.rotation, FatherObject.transform);
+							note.transform.GetChild(1).gameObject.GetComponent<Transform>().transform.localScale =
+							new Vector3(0.5f, (Mathf.Abs(Data.root.NoteData[i].Note[j].end_time - Data.root.NoteData[i].Note[j].start_time) * 5.25f / 3.3f), 0);
+							note.name = "Note";
+							NoteDic.Add(note, Data.root.NoteData[i].Note[j]);
+						}
+					}
+				}
+			Ready = true;
+			RefreshReceiverNoteData();
+			Debug.Log("ReadyNote");
+		}
+        catch { }
+		yield return new WaitForEndOfFrame();
+    }
+	private  GameObject GetNoteType(int index)
+	{
+		switch (index)
+		{
+			case 0:
+				{
+					return RedClick;
+				}
+			case 1:
+				{
+					return WhiteClick;
+				}
+			case 2:
+				{
+					return BlackClick;
+				}
+			case 3:
+				{
+					return Drag;
+				}
+			case 4:
+				{
+					return Hold;
+				}
+			case 6:
+				{
+					return Flick;
+				}
+			default: return BlackClick;
+		}
+	}
+	public static void ClearReceiverNoteData()//æ¸…ç©ºè¢«åˆ é™¤çš„æ¥æ”¶å™¨çš„å†…å®¹éŸ³ç¬¦
+    {
+		List<Note> note = new List<Note>(TargetReceiver.Note);
         try
         {
-			foreach (KeyValuePair<GameObject, NoteBase> kvp in NoteDic)//ÖÚËùÖÜÖª£¬²»ÒªÓÃForeachĞŞ¸Ä¼¯ºÏ£¬ËùÒÔÕâ¿ÉÄÜĞèÒªĞŞ¸Ä
+			foreach (KeyValuePair<GameObject, Note> kvp in NoteDic)//ä¼—æ‰€å‘¨çŸ¥ï¼Œä¸è¦ç”¨Foreachä¿®æ”¹é›†åˆï¼Œæ‰€ä»¥è¿™å¯èƒ½éœ€è¦ä¿®æ”¹
 			{
 				for (int j = 0; j < TargetReceiver.Note.Count; j++)
 				{
 					if (kvp.Value == note[j])
 					{
 						NoteDic.Remove(kvp.Key);
-						DestroyImmediate(kvp.Key);
-						Debug.Log("Íê³É");
+						Destroy(kvp.Key);
+						Debug.Log("æ¸…ç†å®Œæˆ");
 						break;
 					}
 				}
 			}
 		}
-        catch(InvalidOperationException e)
+        catch(InvalidOperationException)
 		{
+			return;
 		}
 		TargetReceiver.Note.Clear();
 	}
-	public static void RefreshReceiverNoteData()//¸ù¾İÑ¡¶¨µÄÒô·ûË¢ĞÂ±à¼­½çÃæ
+
+	public static void RefreshReceiverNoteData()//æ ¹æ®é€‰å®šçš„éŸ³ç¬¦åˆ·æ–°ç¼–è¾‘ç•Œé¢
     {
-		    TargetReceiver = ReceiverManager.ReciverDic[ReceiverManager.TargetReceiver];
+		    TargetReceiver = ReceiverManager.ReceiverDic[ReceiverManager.TargetReceiver];
 			GameObject[] Notes= GameObject.FindGameObjectsWithTag("Note");
 		    foreach (GameObject n in Notes)
             {
 			   n.SetActive(false);
-			   //Debug.Log("¹Ø±ÕÒ»´Î");
+			   //Debug.Log("å…³é—­ä¸€æ¬¡");
 			}
-		   // Debug.Log("¹Ø±ÕÍê³É");
-			foreach (KeyValuePair<GameObject, NoteBase> kvp in NoteDic)//±éÀúµ±Ç°ËùÓĞÒô·ûĞÅÏ¢
+		   // Debug.Log("å…³é—­å®Œæˆ");
+			foreach (KeyValuePair<GameObject, Note> kvp in NoteDic)//éå†å½“å‰æ‰€æœ‰éŸ³ç¬¦ä¿¡æ¯
 			{
-				foreach (NoteBase note in TargetReceiver.Note)
+				foreach (Note note in TargetReceiver.Note)
 				{
 					if (kvp.Value==note)
 					{
@@ -105,32 +220,36 @@ public class NoteDataManager : MonoBehaviour
 			}
     }
 	void NoteInput()
+	{
+		GameObject note = Instantiate(Note, mousePosition, Note.transform.rotation, FatherObject.transform);
+		note.name = "Note";
+		//ç¼–è¾‘é¢æ¿å®ä¾‹åŒ–ä¸€ä¸ª2déŸ³ç¬¦å¯¹è±¡
+		Note notemes = new Note(SetPosition(note) * GameTime.secPerBeat, index, Angle, 1, false);
+		//éŸ³ç¬¦ä¿¡æ¯å®ä¾‹åŒ–
+		NoteDic.Add(note, notemes);//æ ¹æ®å­—å…¸ç»‘å®šéŸ³ç¬¦ä¿¡æ¯å’Œunity2då¯¹è±¡
+		TargetReceiver.Note.Add(notemes);//å­˜å…¥å½“å‰æŒ‡å®šæ¥æ”¶å™¨çš„noteåˆ—è¡¨
+		Debug.Log(TargetReceiver.Position_x);
+	}
+	void HoldNoteInput()
     {
-        if (index != 4)//·ÇholdÒô·ûÍ³Ò»²ÉÓÃ´Ë·½Ê½
-        {
-			GameObject note = Instantiate(Note, mousePosition, Note.transform.rotation, FatherObject.transform);
+		//å®ä¾‹åŒ–HoldéŸ³ç¬¦æ–¹æ³•
+		mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);//è½¬æ¢ä¸–ç•Œåæ ‡
+		HoldMousePosition[1] = mousePosition;
+		TargetLine.Add(GetNearestLine(HoldMousePosition[1]));//æ‹¿åˆ°ç¬¬2ä¸ªç‚¹å‡»ä½ç½®çš„æœ€è¿‘çº¿æ¡
+		Debug.Log("æ‹¿åˆ°ç¬¬äºŒä¸ªä½ç½®");
+			GameObject note = Instantiate(Note, TargetLine[0].transform.position, Note.transform.rotation, FatherObject.transform);
+			Note notemes = new Note(SetPosition(note) * GameTime.secPerBeat,
+				float.Parse(TargetLine[1].name) * GameTime.secPerBeat, index, 0, 1, false);
 			note.name = "Note";
-			//±à¼­Ãæ°åÊµÀı»¯Ò»¸ö2dÒô·û¶ÔÏó
-			NoteBase notemes = new NoteBase(SetPosition(note) * GameTime.secPerBeat, index, Angle, 1, false);
-			//Òô·ûĞÅÏ¢ÊµÀı»¯
-			NoteDic.Add(note, notemes);//¸ù¾İ×Öµä°ó¶¨Òô·ûĞÅÏ¢ºÍunity2d¶ÔÏó
-			TargetReceiver.Note.Add(notemes);//´æÈëµ±Ç°Ö¸¶¨½ÓÊÕÆ÷µÄnoteÁĞ±í
-			Debug.Log(TargetReceiver.Position_x);
-		}
-        else
-        {
-			//ÊµÀı»¯HoldÒô·û·½·¨
-			Debug.Log("ÊµÀı»¯HoldÒô·û");
-			GameObject note = Instantiate(Note, Note.transform.position, Note.transform.rotation, FatherObject.transform);
-			NoteBase notemes = new NoteBase(SetPosition(note) * GameTime.secPerBeat,
-				GetEndPosition() * GameTime.secPerBeat, index, 0, 1, false);
-			note.name = "Note";
-			//Note.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();//»ñÈ¡¶ÔÏóµÄ×Ó¶ÔÏóµÄspriteµÄ·½·¨
-			Debug.Log(notemes.start_time);
-			Debug.Log(notemes.Finish_time);
-			NoteDic.Add(note, notemes);//¸ù¾İ×Öµä°ó¶¨Òô·ûĞÅÏ¢ºÍunity2d¶ÔÏó
-			TargetReceiver.Note.Add(notemes);//´æÈëµ±Ç°Ö¸¶¨½ÓÊÕÆ÷µÄnoteÁĞ±í
-        }
+			note.transform.GetChild(1).gameObject.GetComponent<Transform>().transform.localScale =
+				new Vector3(0.5f, (Mathf.Abs(TargetLine[1].transform.position.y - TargetLine[0].transform.position.y) / 3.3f), 0);
+			//Note.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();//è·å–å¯¹è±¡çš„å­å¯¹è±¡çš„spriteçš„æ–¹æ³•
+			//Debug.Log(notemes.start_time);
+			//Debug.Log(notemes.end_time);
+		    HoldMousePosition.Clear();
+		     TargetLine.Clear();//æ¸…ç©ºä¿¡æ¯
+			NoteDic.Add(note, notemes);//æ ¹æ®å­—å…¸ç»‘å®šéŸ³ç¬¦ä¿¡æ¯å’Œunity2då¯¹è±¡
+			TargetReceiver.Note.Add(notemes);//å­˜å…¥å½“å‰æŒ‡å®šæ¥æ”¶å™¨çš„noteåˆ—
 	}
 	void NoteInput_Delete()
     {
@@ -138,9 +257,9 @@ public class NoteDataManager : MonoBehaviour
 			RaycastHit hit;
 			if (Physics.Raycast(ray, out hit)&& hit.collider.gameObject.name=="Note"&& hit.collider.gameObject.activeSelf)
 		    { 
-			TargetReceiver.Note.Remove(NoteDic[hit.collider.gameObject]);//ÒÆ³öµ±Ç°½ÓÊÕÆ÷noteĞòÁĞ
-			NoteDic.Remove(hit.collider.gameObject);//ÒÆ³ö×Öµä
-			DestroyImmediate(hit.collider.gameObject);//É¾³ıÊµÀı»¯µÄu2d¶ÔÏó
+			TargetReceiver.Note.Remove(NoteDic[hit.collider.gameObject]);//ç§»å‡ºå½“å‰æ¥æ”¶å™¨noteåºåˆ—
+			NoteDic.Remove(hit.collider.gameObject);//ç§»å‡ºå­—å…¸
+			Destroy(hit.collider.gameObject);//åˆ é™¤å®ä¾‹åŒ–çš„u2då¯¹è±¡
 		    }
 	}
 
@@ -150,76 +269,97 @@ public class NoteDataManager : MonoBehaviour
 			case 0:
                 {
 					Note = RedClick;
+					HoldInput = false;
+					HoldMousePosition.Clear();
+					TargetLine.Clear();
 					break;
                 }
 			case 1:
 				{
 					Note = WhiteClick;
+					HoldInput = false;
+					HoldMousePosition.Clear();
+					TargetLine.Clear();
 					break;
                 }
 			case 2:
                 {
 					Note = BlackClick;
+					HoldInput = false;
+					HoldMousePosition.Clear();
+					TargetLine.Clear();
 					break;
                 }
 			case 3:
                 {
 					Note = Drag;
+					HoldInput = false;
+					HoldMousePosition.Clear();
+					TargetLine.Clear();
 					break;
                 }
 			case 4:
                 {
 					Note = Hold;
+					HoldInput = true;
 					break;
                 }
 			case 6:
                 {
 					Note = Flick;
+					HoldInput = false;
+					HoldMousePosition.Clear();
+					TargetLine.Clear();
 					break;
                 }
 		}
     }
-	private int SetPosition(GameObject NOTE)
-	{
-			GameObject TargetObject = lines[0];//Ä¬ÈÏ³õÊ¼»¯
-			float diff = (lines[0].transform.position.y - NOTE.transform.position.y);//¼ÆËãy¾àÀë²îÖµ
-			diff = Mathf.Abs(diff);//È¡¾ø¶ÔÖµ
-			float Target = diff;
-			foreach (GameObject l in lines)//±éÀúËùÓĞÊ±¼äÏß
-			{
-				diff = (l.transform.position.y - NOTE.transform.position.y); //¼ÆËãnoteÓëlineµÄ¾àÀë²î
-				diff = Mathf.Abs(diff);//È¡¾ø¶ÔÖµ
-				if (diff < Target)
-				{ //ÕÒ³ö×î½ü¾àÀë
-					Target = diff;
-					TargetObject = l;//È¡µÃ×î½üÏßÌõ
-				}
-			}
-			NOTE.transform.position = TargetObject.transform.position;//·ÅÖÃÎü¸½ºóÒô·û
-		    NOTE.transform.position = new Vector3(-6.5f, NOTE.transform.position.y, NOTE.transform.position.z);
-			return int.Parse(TargetObject.name);//¸ù¾İÏßµÄ±àºÅ¼ÆËã¶ÔÓ¦Ê±¼ä
-    }
-
-	int GetEndPosition()
-	{
-		GameObject[] lines;//´æ´¢ËùÓĞÏßĞÅÏ¢
+	public GameObject GetNearestLine(Vector3 MousePosition)
+    {
 		lines = GameObject.FindGameObjectsWithTag("Line");
-		GameObject TargetObject = lines[0];//Ä¬ÈÏ³õÊ¼»¯
-		float diff = (lines[0].transform.position.y - endPosition.y);//¼ÆËãy¾àÀë²îÖµ
-		diff = Mathf.Abs(diff);//È¡¾ø¶ÔÖµ
+		GameObject TargetObject = lines[0];
+		float diff = (lines[0].transform.position.y - MousePosition.y);//ï¿½ï¿½ï¿½ï¿½yï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+		diff = Mathf.Abs(diff);//È¡ï¿½ï¿½ï¿½ï¿½Öµ
 		float Target = diff;
-		foreach (GameObject l in lines)//±éÀúËùÓĞÊ±¼äÏß
+		foreach (GameObject l in lines)//éå†æ‰€æœ‰æ—¶é—´çº¿
 		{
-			diff = (l.transform.position.y - endPosition.y); //¼ÆËãendPositionÓëlineµÄ¾àÀë²î
-			diff = Mathf.Abs(diff);//È¡¾ø¶ÔÖµ
+			diff = (l.transform.position.y - MousePosition.y); //è®¡ç®—ç‚¹å‡»ä½ç½®ä¸lineçš„è·ç¦»å·®
+			diff = Mathf.Abs(diff);//å–ç»å¯¹å€¼
 			if (diff < Target)
-			{ //ÕÒ³ö×î½ü¾àÀë
+			{ //æ‰¾å‡ºæœ€è¿‘è·ç¦»
 				Target = diff;
-				TargetObject = l;//È¡µÃ×î½üÏßÌõ
+				TargetObject = l;//å–å¾—æœ€è¿‘çº¿æ¡
 			}
 		}
-		return int.Parse(TargetObject.name);//¸ù¾İÏßµÄ±àºÅ¼ÆËã¶ÔÓ¦Ê±¼ä
+		return TargetObject;
 	}
+	public GameObject GetNearestLine(GameObject NOTE)
+	{
+		lines = GameObject.FindGameObjectsWithTag("Line");
+		GameObject TargetObject = lines[0];
+		float diff = (lines[0].transform.position.y - NOTE.transform.position.y);//ï¿½ï¿½ï¿½ï¿½yï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+		diff = Mathf.Abs(diff);//È¡ï¿½ï¿½ï¿½ï¿½Öµ
+		float Target = diff;
+		foreach (GameObject l in lines)//éå†æ‰€æœ‰æ—¶é—´çº¿
+		{
+			diff = (l.transform.position.y - NOTE.transform.position.y); //è®¡ç®—ç‚¹å‡»ä½ç½®ä¸lineçš„è·ç¦»å·®
+			diff = Mathf.Abs(diff);//å–ç»å¯¹å€¼
+			if (diff < Target)
+			{ //æ‰¾å‡ºæœ€è¿‘è·ç¦»
+				Target = diff;
+				TargetObject = l;//å–å¾—æœ€è¿‘çº¿æ¡
+			}
+		}
+		return TargetObject;
+	}
+	private int SetPosition(GameObject NOTE)
+	{
+		    GameObject TargetObject = GetNearestLine(NOTE);
+			NOTE.transform.position = TargetObject.transform.position;//æ”¾ç½®å¸é™„åéŸ³ç¬¦
+		    NOTE.transform.position = new Vector3(-6.5f, NOTE.transform.position.y, NOTE.transform.position.z);
+			return int.Parse(TargetObject.name);//æ ¹æ®çº¿çš„ç¼–å·è®¡ç®—å¯¹åº”æ—¶é—´
+    }
+
 	public void RedClickChoose()
     {
 		index = 0;
@@ -273,4 +413,46 @@ public class NoteDataManager : MonoBehaviour
         }
 		//Debug.Log(Angle);
     }
+	public void SetClosePanel()
+    {
+		DataPanel.SetActive(false);
+    }
+	public void SaveData()
+    {
+		TargetNote.degree = float.Parse(Degree.text);
+		TargetNote.speed = float.Parse(Speed.text);
+		TargetNote.fake = bool.Parse(boolValue.captionText.text);
+    }
+	public void OpenDataPanel()
+    {
+		Degree.text= TargetNote.degree.ToString();
+		Speed.text = TargetNote.speed.ToString();
+		boolValue.captionText.text = TargetNote.fake.ToString();
+		time.text = TargetNote.start_time.ToString();
+		DataPanel.SetActive(true);
+		ReceiverDataPanel.SetActive(false);
+    }
+	public void SetCloseRecPanel()
+	{
+		ReceiverDataPanel.SetActive(false);
+	}
+	public void SetCloseRecEventPanel()
+    {
+		ReceiverEventDataPanle.SetActive(false);
+
+	}
+	public void SaveRecData()
+	{
+		TargetReceiver.size = float.Parse(Size.text);
+		TargetReceiver.alpha = int.Parse(Alpha.text);
+	}
+	public void OpenRecDataPanel()
+	{
+		Alpha.text = TargetReceiver.alpha.ToString();
+		Size.text = TargetReceiver.size.ToString();
+		PosX.text = TargetReceiver.Position_x.ToString();
+		PosY.text = TargetReceiver.Position_y.ToString();
+		ReceiverDataPanel.SetActive(true);
+		DataPanel.SetActive(false);
+	}
 }

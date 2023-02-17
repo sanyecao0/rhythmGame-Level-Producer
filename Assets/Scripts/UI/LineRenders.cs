@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LineRenders : MonoBehaviour
 {
-    private float SongCutNum;//歌曲小节数
+    public static float SongCutNum;//歌曲小节数
     public LineRenderer lineRenderL;
     public LineRenderer lineRenderR;
     public LineRenderer BarCutLine;//一拍画一个这个线
@@ -16,7 +16,8 @@ public class LineRenders : MonoBehaviour
     int BeatCut = GameTime.BeatCutCount;
     void Start()
     {
-        SongCutNum = (GameTime.songsLength * GameTime.Basic_BPM / 60f);//算出小节数,生成对应长度线
+        //SongCutNum = (GameTime.songsLength * GameTime.Basic_BPM / 60f);//算出小节数,生成对应长度线
+        //Debug.Log(SongCutNum);
         BeatCut = GameTime.BeatCutCount;
         LineDraw();
     }
