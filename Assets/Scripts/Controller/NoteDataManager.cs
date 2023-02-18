@@ -101,7 +101,7 @@ public class NoteDataManager : MonoBehaviour
 			}
 		}
 	}
-	IEnumerator LoadResourceData()
+	IEnumerator LoadResourceData()//实例化note等的方法
     {
 		try
 		{
@@ -115,18 +115,25 @@ public class NoteDataManager : MonoBehaviour
 						if (type != 4)
 						{
 							GameObject note = Instantiate(GetNoteType(Data.root.NoteData[i].Note[j].type),
-							new Vector3(-6.5f, -4+Data.root.NoteData[i].Note[j].start_time * 5.25f, 8),
+							new Vector3(-6.5f, 1.75f * (Data.root.NoteData[i].Note[j].start_time * float.Parse(LevelReadAndWrite.lm.BasicBPM)) / 60f - 4f, 8),
 							GetNoteType(Data.root.NoteData[i].Note[j].type).transform.rotation, FatherObject.transform);
 							note.name = "Note";
 							NoteDic.Add(note, Data.root.NoteData[i].Note[j]);
+							
 						}
 						else if (type == 4)
 						{
 							GameObject note = Instantiate(GetNoteType(Data.root.NoteData[i].Note[j].type),
-							new Vector3(-6.5f, -4+Data.root.NoteData[i].Note[j].start_time * 5.25f, 8),
+							new Vector3(-6.5f, 1.75f * (Data.root.NoteData[i].Note[j].start_time * float.Parse(LevelReadAndWrite.lm.BasicBPM) + 1) / 60f - 4f, 8),
 							GetNoteType(Data.root.NoteData[i].Note[j].type).transform.rotation, FatherObject.transform);
 							note.transform.GetChild(1).gameObject.GetComponent<Transform>().transform.localScale =
-							new Vector3(0.5f, (Mathf.Abs(Data.root.NoteData[i].Note[j].end_time - Data.root.NoteData[i].Note[j].start_time) * 5.25f / 3.3f), 0);
+								new Vector3(0.5f,
+									Mathf.Abs( (Data.root.NoteData[i].Note[j].end_time *
+									 float.Parse(LevelReadAndWrite.lm.BasicBPM)) / 60 -
+									(Data.root.NoteData[i].Note[j].start_time *
+									 float.Parse(LevelReadAndWrite.lm.BasicBPM)) / 60 ) * 0.5303f, 0);
+							//Data.root.NoteData[i].Note[j].end_time
+							//Data.root.NoteData[i].Note[j].start_time
 							note.name = "Note";
 							NoteDic.Add(note, Data.root.NoteData[i].Note[j]);
 						}
