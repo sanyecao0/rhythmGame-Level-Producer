@@ -106,6 +106,7 @@ public class OtherEvent
 public class Data
 {
     public static Root root = new Root();
+    public static LevelMessage levelMessage = new LevelMessage();
 }
 
 public class Root
@@ -118,16 +119,9 @@ public class LevelMessage
     public string TrackName;
     public string Artist;
     public string BPM;
+    public string LevelDesign;
     public string BasicBPM;
     public string illustrator;
-    public LevelMessage(string trackname, string artist, string bpm, string basicbpm, string illustrator)
-    {
-        this.TrackName = trackname;
-        this.Artist = artist;
-        this.BPM = bpm;
-        this.BasicBPM = basicbpm;
-        this.illustrator = illustrator;
-    }
     public LevelMessage() { }
 }
 

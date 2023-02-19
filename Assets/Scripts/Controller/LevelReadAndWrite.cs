@@ -13,18 +13,24 @@ public class LevelReadAndWrite : MonoBehaviour
     public static string LevelPath;
     public static string FatherPath;
 
-
     public InputField TrackName;
     public InputField Artist;
     public InputField BPM;
+    public InputField LevelDesign;
     public InputField BasicBPM;
     public InputField illustrator;
+    public static bool SetLevelMessageBox = true;
 
-    public static LevelMessage lm;
     public  void SaveLevelMessage(){
-        lm = new LevelMessage(TrackName.text, Artist.text, BPM.text, BasicBPM.text, TrackName.text);
-        GameTime.Basic_BPM = float.Parse(lm.BasicBPM);
+        Data.levelMessage.Artist = Artist.text;
+        Data.levelMessage.BasicBPM = BasicBPM.text;
+        Data.levelMessage.LevelDesign = LevelDesign.text;
+        Data.levelMessage.BPM = BPM.text;
+        Data.levelMessage.TrackName = TrackName.text;
+        Data.levelMessage.illustrator = illustrator.text;
+        GameTime.Basic_BPM = float.Parse(Data.levelMessage.BasicBPM);
         LineRenders.SongCutNum = (GameTime.songsLength * GameTime.Basic_BPM / 60f);
+        EventLines.SongCutNum = LineRenders.SongCutNum;
     }
 
     public static void GetPath(string fatherPath)//获取路径
@@ -63,7 +69,7 @@ public class LevelReadAndWrite : MonoBehaviour
         writer.Flush();
         writer.Close();
         JsonWriter levelm = new JsonWriter();
-        JsonMapper.ToJson(lm,levelm);
+        JsonMapper.ToJson(Data.levelMessage,levelm);
         StreamWriter writer2 = new StreamWriter(LevelMessagePath, false, System.Text.Encoding.UTF8);
         writer2.WriteLine(levelm);
         writer2.Flush();
@@ -75,11 +81,13 @@ public class LevelReadAndWrite : MonoBehaviour
         StreamReader LevMes = new StreamReader(LevelMessagePath);
         JsonReader Leveldata = new JsonReader(reader.ReadToEnd().ToString());
         JsonReader levelMesData = new JsonReader(LevMes.ReadToEnd().ToString());
-        lm = JsonMapper.ToObject<LevelMessage>(levelMesData);
+        Data.levelMessage = JsonMapper.ToObject<LevelMessage>(levelMesData);
+        GameTime.Basic_BPM = float.Parse(Data.levelMessage.BasicBPM) ;
         Data.root=JsonMapper.ToObject<Root>(Leveldata);
         //Debug.Log(Data.root.NoteData.Count);
         reader.Close();
         LevMes.Close();
+        SetLevelMessageBox = false;
         //实例化方法
     }
 }

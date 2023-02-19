@@ -18,7 +18,7 @@ public class Tips : MonoBehaviour
     }
     public void GetTips()
     {
-        ReadTips("TextAsset/Tips.txt");
+        ReadTips("/TextAsset/Tips.txt");
         r = Random.Range(0, tips.Length);
         (tipMessage).GetComponent<TMP_Text>().text = tips[r];
     }
