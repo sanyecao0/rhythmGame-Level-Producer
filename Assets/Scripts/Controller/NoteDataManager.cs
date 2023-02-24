@@ -48,7 +48,7 @@ public class NoteDataManager : MonoBehaviour
 	public static bool Ready = false;
 	private void Start()
 	{
-		Debug.Log("Start");
+		//Debug.Log("Start");
 		Note = BlackClick;
 		lines = GameObject.FindGameObjectsWithTag("Line");
 		StartCoroutine(LoadResourceData());

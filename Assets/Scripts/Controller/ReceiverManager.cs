@@ -37,7 +37,7 @@ public class ReceiverManager : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("Awake");
+        //Debug.Log("Awake");
         Vlines = GameObject.FindGameObjectsWithTag("VerticalLine");
         Hlines = GameObject.FindGameObjectsWithTag("HorizontalLine");
         if (Data.root.NoteData.Count == 0)//新谱面应至少有一个接收器
