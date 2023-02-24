@@ -21,6 +21,8 @@ public class GameTime : MonoBehaviour
     public InputField inputBPM, inputAudioOffset;
     public AudioSource songs;
     public GameObject Mask;
+    public GameObject NotePanel;
+    public GameObject EventPanel;
 
     public static float songsLength;//给Line用的变量
 
@@ -77,6 +79,10 @@ public class GameTime : MonoBehaviour
         if(float.Parse(inputTimeString.text)>=0&& float.Parse(inputTimeString.text) <= songs.clip.length)
         {
             songs.time = float.Parse(inputTimeString.text);
+            NotePanel.transform.position = new Vector3(0,
+                -1.75f * (songs.time * Basic_BPM) / 60f , -7);
+            EventPanel.transform.position = new Vector3(0,
+           -1.75f * (songs.time * Basic_BPM) / 60f , -7);
         }
         else
         {

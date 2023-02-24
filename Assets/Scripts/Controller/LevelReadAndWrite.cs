@@ -19,7 +19,7 @@ public class LevelReadAndWrite : MonoBehaviour
     public InputField LevelDesign;
     public InputField BasicBPM;
     public InputField illustrator;
-    public static bool SetLevelMessageBox = true;
+    public static bool SetLevelMessageBox = false;
 
     public  void SaveLevelMessage(){
         Data.levelMessage.Artist = Artist.text;
@@ -38,8 +38,8 @@ public class LevelReadAndWrite : MonoBehaviour
         FatherPath = fatherPath;
         SongsPath = FatherPath + "song.ogg";
         CoverPath = FatherPath + "cover.png";
-        LevelMessagePath= FatherPath + "LevelMessage.txt";
-        LevelPath = FatherPath + "0.txt";
+        LevelMessagePath= FatherPath + "LevelMessage.json";
+        LevelPath = FatherPath + "0.json";
         CheckLevel(fatherPath);
     }
     public static void CheckLevel(string fatherPath)//没有谱面文件的话自行创建
@@ -79,15 +79,14 @@ public class LevelReadAndWrite : MonoBehaviour
     {
         StreamReader reader = new StreamReader(LevelPath);
         StreamReader LevMes = new StreamReader(LevelMessagePath);
-        JsonReader Leveldata = new JsonReader(reader.ReadToEnd().ToString());
         JsonReader levelMesData = new JsonReader(LevMes.ReadToEnd().ToString());
+        JsonReader Leveldata = new JsonReader(reader.ReadToEnd().ToString());
+        Data.root = JsonMapper.ToObject<Root>(Leveldata);
         Data.levelMessage = JsonMapper.ToObject<LevelMessage>(levelMesData);
-        GameTime.Basic_BPM = float.Parse(Data.levelMessage.BasicBPM) ;
-        Data.root=JsonMapper.ToObject<Root>(Leveldata);
-        //Debug.Log(Data.root.NoteData.Count);
+        GameTime.Basic_BPM = float.Parse(Data.levelMessage.BasicBPM);
+        SetLevelMessageBox = true;
         reader.Close();
         LevMes.Close();
-        SetLevelMessageBox = false;
         //实例化方法
     }
 }

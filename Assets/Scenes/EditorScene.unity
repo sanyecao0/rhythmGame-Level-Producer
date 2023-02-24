@@ -24135,6 +24135,8 @@ MonoBehaviour:
   inputAudioOffset: {fileID: 476252946}
   songs: {fileID: 1316397312}
   Mask: {fileID: 940936477}
+  NotePanel: {fileID: 813688673}
+  EventPanel: {fileID: 575572651}
 --- !u!114 &1898212991
 MonoBehaviour:
   m_ObjectHideFlags: 0

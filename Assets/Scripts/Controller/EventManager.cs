@@ -60,7 +60,7 @@ public class EventManager : MonoBehaviour
    public  static bool Ready = false;
     private void Awake()
     {
-        Debug.Log("Awake");
+        //Debug.Log("Awake");
         StartCoroutine(StartLoad());
         FatherObject.SetActive(false);
     }

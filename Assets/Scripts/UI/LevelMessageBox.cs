@@ -14,14 +14,15 @@ public class LevelMessageBox : MonoBehaviour
     public GameObject LevelMesPanel;
     private void Start()
     {
-        Artist.text = Data.levelMessage.Artist;
-        BasicBPM.text = Data.levelMessage.BasicBPM;
-        BPM.text = Data.levelMessage.BPM;
-        TrackName.text = Data.levelMessage.TrackName;
-        illustrator.text = Data.levelMessage.illustrator;
-        LevelMesPanel.SetActive(LevelReadAndWrite.SetLevelMessageBox);
+        if (LevelReadAndWrite.SetLevelMessageBox)
+        {
+            Artist.text = Data.levelMessage.Artist;
+            BasicBPM.text = Data.levelMessage.BasicBPM;
+            BPM.text = Data.levelMessage.BPM;
+            TrackName.text = Data.levelMessage.TrackName;
+            illustrator.text = Data.levelMessage.illustrator;
+            LevelMesPanel.SetActive(true);
+        }
     }
-
-
 }
 
