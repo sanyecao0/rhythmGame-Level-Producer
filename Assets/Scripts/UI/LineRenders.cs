@@ -17,7 +17,7 @@ public class LineRenders : MonoBehaviour
     void Start()
     {
         //SongCutNum = (GameTime.songsLength * GameTime.Basic_BPM / 60f);//算出小节数,生成对应长度线
-        //Debug.Log(SongCutNum);
+        Debug.Log(SongCutNum);
         BeatCut = GameTime.BeatCutCount;
         LineDraw();
     }
@@ -54,7 +54,7 @@ public class LineRenders : MonoBehaviour
                 c.LineTime = i * GameTime.secPerBeat / GameTime.BeatCutCount;//计算当前线的时间点
                 linesData.Add(c);
                 cutline.name = i.ToString();
-            }
+        }
         }
     }
     

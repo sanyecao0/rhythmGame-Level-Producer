@@ -62,8 +62,8 @@ public class GameTime : MonoBehaviour
              AudioClip clip =DownloadHandlerAudioClip.GetContent(uwr);
             songs.clip = clip;
             songsLength = songs.clip.length;
-            LineRenders.SongCutNum = (songsLength * Basic_BPM / 60f);
-            EventLines.SongCutNum = (songsLength * Basic_BPM / 60f);
+            LineRenders.SongCutNum = songsLength /(Basic_BPM / 60f);
+            EventLines.SongCutNum = songsLength / (Basic_BPM / 60f);
             /*while (true)
             {
                 if (NoteDataManager.Ready && ReceiverManager.Ready && EventManager.Ready)

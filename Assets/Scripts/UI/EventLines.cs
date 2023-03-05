@@ -19,6 +19,7 @@ public class EventLines : MonoBehaviour
     public static List<CutLine> linesData = new List<CutLine>();//存储所有线的时间信息
     void Start()
     {
+        SongCutNum = (GameTime.songsLength * GameTime.Basic_BPM / 60f);//算出小节数,生成对应长度线
         lineRender1.transform.localScale += new Vector3(0, 0, SongCutNum * 7 - 1);
         lineRender2.transform.localScale += new Vector3(0, 0, SongCutNum * 7 - 1);
         lineRender3.transform.localScale += new Vector3(0, 0, SongCutNum * 7 - 1);
