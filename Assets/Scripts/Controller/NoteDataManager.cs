@@ -127,11 +127,7 @@ public class NoteDataManager : MonoBehaviour
 							new Vector3(-6.5f, 1.75f * (Data.root.NoteData[i].Note[j].start_time * GameTime.Basic_BPM + 1) / 60f - 4f, 8),
 							GetNoteType(Data.root.NoteData[i].Note[j].type).transform.rotation, FatherObject.transform);
 							note.transform.GetChild(1).gameObject.GetComponent<Transform>().transform.localScale =
-								new Vector3(0.5f,
-									Mathf.Abs( (Data.root.NoteData[i].Note[j].end_time *
-									 GameTime.Basic_BPM) / 60 -
-									(Data.root.NoteData[i].Note[j].start_time *
-									 GameTime.Basic_BPM) / 60 ) * 0.5303f, 0);
+								new Vector3(0.5f,Mathf.Abs( (Data.root.NoteData[i].Note[j].end_time *GameTime.Basic_BPM) / 60 -(Data.root.NoteData[i].Note[j].start_time *GameTime.Basic_BPM) / 60 ) * 0.5303f, 0);
 							//Data.root.NoteData[i].Note[j].end_time
 							//Data.root.NoteData[i].Note[j].start_time
 							note.name = "Note";

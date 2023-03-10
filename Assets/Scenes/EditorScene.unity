@@ -1701,7 +1701,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\u5FC5\u987B\u4FEE\u6539\u6B64\u5904"
+  m_Text: "BPM\u5FC5\u987B\u4FEE\u6539\u6B64\u5904"
 --- !u!222 &187282633
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17007,11 +17007,11 @@ RectTransform:
   m_Father: {fileID: 1018983521}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.892, y: 0.5}
-  m_AnchorMax: {x: 0.892, y: 0.9364445}
-  m_AnchoredPosition: {x: 9.379883, y: 61.140015}
-  m_SizeDelta: {x: 762.38, y: -101.49}
-  m_Pivot: {x: 1, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 381.18988, y: -58.60498}
+  m_SizeDelta: {x: -1157.62, y: 369.51}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1324446605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23458,11 +23458,11 @@ RectTransform:
   m_Father: {fileID: 733050592}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -9, y: 138}
-  m_SizeDelta: {x: 159, y: -1049.4}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -9, y: -386.7}
+  m_SizeDelta: {x: -213, y: 30.599976}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1859036681
 MonoBehaviour:
   m_ObjectHideFlags: 0

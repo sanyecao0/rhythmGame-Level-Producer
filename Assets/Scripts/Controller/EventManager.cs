@@ -241,7 +241,8 @@ public class EventManager : MonoBehaviour
                     GameObject RecEvent = Instantiate(GetEventGameObject(type), GetResourcePosition(type, startTime), GetEventGameObject(type).transform.rotation, FatherObject.transform);
                     RecEvent.name = "RecEvent";
                     RecEvent.transform.GetChild(1).gameObject.GetComponent<Transform>().transform.localScale =
-                    new Vector3(0.5f, (Mathf.Abs(endtime - startTime) * 5.25f / 3.3f), 0);
+                     new Vector3(0.5f,
+                Mathf.Abs((endtime * GameTime.Basic_BPM) / 60 - (startTime * GameTime.Basic_BPM) / 60) * 0.5303f, 0);
                     EventDic.Add(RecEvent, Data.root.NoteData[i].Event[j]);
                 }
             }
@@ -253,7 +254,7 @@ public class EventManager : MonoBehaviour
         if(Data.root.OtherEvent.TimingGroup.Count!=0)
         for (int i = 0; i < Data.root.OtherEvent.TimingGroup.Count; i++)
         {
-            GameObject Timing = Instantiate(TimingGroupObject, new Vector3(-2.05f, Data.root.OtherEvent.TimingGroup[i].time * 5.25f-4, 8), TimingGroupObject.transform.rotation, FatherObject.transform);
+            GameObject Timing = Instantiate(TimingGroupObject, new Vector3(-2.05f, 1.75f * (Data.root.OtherEvent.TimingGroup[i].time * GameTime.Basic_BPM)/60f - 4f, 8), TimingGroupObject.transform.rotation, FatherObject.transform);
             TimingDic.Add(Timing, Data.root.OtherEvent.TimingGroup[i]);
         }
     }
@@ -264,34 +265,35 @@ public class EventManager : MonoBehaviour
         {
             float startTime = Data.root.OtherEvent.UIEvent[i].start_time;
             float endtime = Data.root.OtherEvent.UIEvent[i].end_time;
-            GameObject UIEvent = Instantiate(UIeventObject, new Vector3(-3.55f,startTime*5.25f-4, 8), UIeventObject.transform.rotation, FatherObject.transform);
-            UIEvent.transform.GetChild(1).gameObject.GetComponent<Transform>().transform.localScale = new Vector3(0.5f, (Mathf.Abs(endtime - startTime) * 5.25f / 3.3f), 0);
+            GameObject UIEvent = Instantiate(UIeventObject, new Vector3(-3.55f, 1.75f * (startTime * GameTime.Basic_BPM) / 60f - 4f, 8), UIeventObject.transform.rotation, FatherObject.transform);
+            UIEvent.transform.GetChild(1).gameObject.GetComponent<Transform>().transform.localScale = new Vector3(0.5f, 
+                Mathf.Abs((endtime * GameTime.Basic_BPM) / 60 - (startTime * GameTime.Basic_BPM) / 60) * 0.5303f, 0);
             UIEventsDic.Add(UIEvent, Data.root.OtherEvent.UIEvent[i]);
         }
     }
     public Vector3 GetResourcePosition(int type,float startTime)
     {
-        switch (type)
+        switch(type)
         {
             case 0://大小
                 {
-                    return new Vector3(-8.05f, -4+startTime * 5.25f, 8);
+                    return new Vector3(-8.05f, 1.75f * (startTime *GameTime.Basic_BPM) / 60f - 4f, 8);
                 }
             case 1://位移
                 {
-                    return new Vector3(-6.55f, -4+startTime * 5.25f, 8);
+                    return new Vector3(-6.55f, 1.75f * (startTime * GameTime.Basic_BPM) / 60f - 4f, 8);
                 }
             case 2://透明度
                 {
-                    return new Vector3(-5.05f, -4+startTime * 5.25f, 8);
+                    return new Vector3(-5.05f, 1.75f * (startTime * GameTime.Basic_BPM) / 60f - 4f, 8);
                 }
             case 3://UI字幕
                 {
-                    return new Vector3(-3.55f, -4+startTime * 5.25f, 8);
+                    return new Vector3(-3.55f, 1.75f * (startTime * GameTime.Basic_BPM) / 60f - 4f, 8);
                 }
             case 4:
                 {
-                    return new Vector3(-2.05f, -4+startTime * 5.25f, 8);
+                    return new Vector3(-2.05f, 1.75f * (startTime * GameTime.Basic_BPM) / 60f - 4f, 8);
                 }
             default:return new Vector3(-8.05f, -4, 8);
         }

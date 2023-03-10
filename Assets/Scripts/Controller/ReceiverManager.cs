@@ -61,6 +61,7 @@ public class ReceiverManager : MonoBehaviour
 
            if (Input.GetMouseButtonDown(0)&& ReceiverManagerPanel.activeSelf)//接收器编辑UI面板启用时生效
           {
+            Debug.Log(Input.mousePosition);
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePosition.z = 8;
@@ -78,8 +79,8 @@ public class ReceiverManager : MonoBehaviour
                 RecInput();
             }
           }
-        if (Input.GetMouseButtonDown(1)&&NoteManagerPanel.activeSelf&& 
-            Input.mousePosition.x>=855&&Input.mousePosition.y<=535&& Input.mousePosition.y >=63)
+        if (Input.GetMouseButtonDown(1)&&NoteManagerPanel.activeSelf&& RecEventManagerPanel.activeSelf&&
+            Input.mousePosition.x>=855&&Input.mousePosition.y<=630&& Input.mousePosition.y >=63)
             //右键选定接收器,note编辑面板启用和接收器管理不启用时生效
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -104,7 +105,7 @@ public class ReceiverManager : MonoBehaviour
             }
         }
         else if(Input.GetMouseButtonDown(1) && RecEventManagerPanel.activeSelf &&
-            Input.mousePosition.x >= 855 && Input.mousePosition.y <= 535 && Input.mousePosition.y >= 63)
+            Input.mousePosition.x >= 855 && Input.mousePosition.y <= 630 )
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
