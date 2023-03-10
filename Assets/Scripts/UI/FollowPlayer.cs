@@ -15,11 +15,12 @@ public class FollowPlayer : MonoBehaviour
     public AudioSource songs;
     void Update()
     {
-        /*if (songs.time == 0)
+        if (NoteData.transform.position.y>0||EventData.transform.position.y>0)
         {
             NoteData.transform.position = new Vector3(0, 0, -7);
             EventData.transform.position = new Vector3(0, 0, -7);
-       }*/
+            songs.time = 0;
+       }
         if (isPlay)
         {
             float move = Time.deltaTime* -1.75f * (GameTime.Basic_BPM / 60f);
