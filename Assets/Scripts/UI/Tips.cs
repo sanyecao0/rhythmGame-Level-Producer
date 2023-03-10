@@ -18,7 +18,7 @@ public class Tips : MonoBehaviour
     }
     public void GetTips()
     {
-        ReadTips("/TextAsset/Tips.txt");
+        ReadTips("StreamingAssets/Tips.txt");
         r = Random.Range(0, tips.Length);
         (tipMessage).GetComponent<TMP_Text>().text = tips[r];
     }
@@ -26,7 +26,7 @@ public class Tips : MonoBehaviour
     public void ReadTips(string Path)
     {
         
-        FileStream fs = new FileStream($"{Application.dataPath}\\{Path}", FileMode.Open, FileAccess.Read);
+        FileStream fs = new FileStream($"{Application.dataPath}/{Path}", FileMode.Open, FileAccess.Read);
         StreamReader streamReader = new StreamReader(fs);
         tips = streamReader.ReadToEnd().Split(new string[] { "\r\n"}, StringSplitOptions.RemoveEmptyEntries);
         streamReader.Close();
