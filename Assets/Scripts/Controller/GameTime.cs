@@ -62,8 +62,8 @@ public class GameTime : MonoBehaviour
              AudioClip clip =DownloadHandlerAudioClip.GetContent(uwr);
             songs.clip = clip;
             songsLength = songs.clip.length;
-            LineRenders.SongCutNum = songsLength /(Basic_BPM / 60f);
-            EventLines.SongCutNum = songsLength / (Basic_BPM / 60f);
+            LineRenders.SongCutNum = songsLength /(Basic_BPM / 60f)+1;
+            EventLines.SongCutNum = songsLength / (Basic_BPM / 60f)+1;
             /*while (true)
             {
                 if (NoteDataManager.Ready && ReceiverManager.Ready && EventManager.Ready)
@@ -74,11 +74,12 @@ public class GameTime : MonoBehaviour
             Mask.SetActive(false);//取消遮罩
         }
     }
-    public void inputTime()//主动调整播放位置接口
+    public void inputTime()//主动调整播放位置
     {
         if(float.Parse(inputTimeString.text)>=0&& float.Parse(inputTimeString.text) <= songs.clip.length)
         {
-            songs.time = float.Parse(inputTimeString.text);
+            songs.time =Convert.ToSingle(inputTimeString.text);
+            Debug.Log("调整"+inputTimeString.text);
             NotePanel.transform.position = new Vector3(0,
                 -1.75f * (songs.time * Basic_BPM) / 60f , -7);
             EventPanel.transform.position = new Vector3(0,
@@ -88,9 +89,8 @@ public class GameTime : MonoBehaviour
         {
             inputTimeString.text = Convert.ToDouble(songs.time).ToString("0.000");
         }
-        //Debug.Log(songs.time);
     }
-    public void inputBeatut()//主动调整节拍拆分接口
+    public void inputBeatut()//主动调整节拍拆分
     {
         if(int.Parse(inputBeatCut.text)>=4&& int.Parse(inputBeatCut.text) <= 32)
         {
@@ -101,7 +101,7 @@ public class GameTime : MonoBehaviour
             inputBeatCut.text =BeatCutCount.ToString();
         }
     }
-    public void InputBasicBPM()//为基础BPM赋值的接口
+    public void InputBasicBPM()//为基础BPM赋值
     {
 
         try

@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\Controller\LevelReadAndWrite.cs" />
     <Compile Include="Assets\Scripts\UI\OpenFile.cs" />
     <Compile Include="Assets\Scripts\Controller\GameTime.cs" />
+    <Compile Include="Assets\Scripts\UI\Quit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -86,6 +87,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\Font\Chat.txt" />
+    <None Include="Assets\StreamingAssets\Tips.txt" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />

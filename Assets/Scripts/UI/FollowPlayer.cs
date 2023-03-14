@@ -23,9 +23,17 @@ public class FollowPlayer : MonoBehaviour
        }
         if (isPlay)
         {
-            float move = Time.deltaTime* -1.75f * (GameTime.Basic_BPM / 60f);
-            NoteData.transform.Translate(0, move, 0);
-            EventData.transform.Translate(0, move, 0);
+            if (songs.time <= GameTime.songsLength)
+            {
+                float move = Time.deltaTime * -1.75f * (GameTime.Basic_BPM / 60f);
+                NoteData.transform.Translate(0, move, 0);
+                EventData.transform.Translate(0, move, 0);
+            }
+            else
+            {
+                songs.time = GameTime.songsLength;
+                inputTimeString.text = Convert.ToDouble(songs.time).ToString("0.000");
+            }
         }
         else if(NoteData.transform.position.y<=0)
         {
@@ -66,7 +74,6 @@ public class FollowPlayer : MonoBehaviour
                     EventData.transform.position += new Vector3(0, 1 * scale);
                     songs.time = songs.time - scale / (1.75f * GameTime.Basic_BPM / 60f);
                     inputTimeString.text = Convert.ToDouble(songs.time).ToString("0.000");
-                    Debug.Log("¼õÊ±¼ä");
                 }
             }
         }

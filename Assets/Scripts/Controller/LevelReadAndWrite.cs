@@ -89,4 +89,13 @@ public class LevelReadAndWrite : MonoBehaviour
         LevMes.Close();
         //实例化方法
     }
+    public void QuitRLD()
+    {
+        Application.Quit();
+    }
+    public static void QuitRLDAndSave()
+    {
+        SaveLevel();
+        Application.Quit();
+    }
 }
